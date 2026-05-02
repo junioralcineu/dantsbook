@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dant's — Articles</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="styles.css" />
+
+<style>
+  /* Articles-only additions */
+  .page-head { padding: clamp(60px, 9vw, 120px) 0 30px; text-align: center; }
+  .page-head h1 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(40px, 6vw, 72px);
+    letter-spacing: -.02em; line-height: 1.05;
+    margin: 14px 0 0; text-wrap: balance;
+  }
+  .page-head p {
+    max-width: 56ch; margin: 18px auto 0;
+    font-size: clamp(15px, 1.2vw, 17px); color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .articles-grid {
+    display: grid; grid-template-columns: 1fr; gap: 18px;
+    margin-top: 48px;
+  }
+  @media (min-width: 720px) { .articles-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1080px) { .articles-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+  .article-card {
+    padding: 18px; border-radius: 18px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 14px;
+    transition: transform .25s ease;
+    text-decoration: none; color: inherit;
+  }
+  .article-card:hover { transform: translateY(-3px); }
+  .article-cover { aspect-ratio: 5/3; border-radius: 10px; overflow: hidden; position: relative; }
+  .article-cover .cover { aspect-ratio: auto; height: 100%; border-radius: 10px; padding: 18px; }
+  .article-meta {
+    display: flex; gap: 10px; align-items: center;
+    font: 500 11.5px/1 var(--font-body); color: var(--ink-3);
+    letter-spacing: .04em;
+  }
+  .article-h {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: 22px; letter-spacing: -.01em; line-height: 1.15;
+    margin: 0; text-wrap: balance;
+  }
+  .article-dek { color: var(--ink-2); margin: 0; font-size: 14.5px; line-height: 1.5; }
+  .article-foot { display: flex; justify-content: space-between; margin-top: auto; padding-top: 6px;
+    font: 500 12px/1 var(--font-body); color: var(--ink-3); }
+</style>
+
+<script type="application/json" id="speaker-notes">[]</script>
+</head>
+<body>
+
+<div class="bg-stage" aria-hidden="true"></div>
+<div id="scroll-progress" class="scroll-progress"></div>
+
+<div id="app"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="i18n.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel">
+
+const { useState, useMemo } = React;
+
+function ArticlesPage() {
+  const { lang, t, d } = useLang();
+  const [tw, setTweak] = useTweaks(/*EDITMODE-BEGIN*/{
+    "theme": "light",
+    "accentHue": 35,
+    "fontPair": "fraunces-inter",
+    "animSpeed": "normal",
+    "grain": true
+  }/*EDITMODE-END*/);
+
+  React.useEffect(() => {
+    const r = document.documentElement;
+    r.setAttribute("data-theme", tw.theme === "navy" ? "navy" : "light");
+    r.style.setProperty("--accent",   `oklch(0.58 0.13 ${tw.accentHue})`);
+    r.style.setProperty("--accent-2", `oklch(0.58 0.13 ${(Number(tw.accentHue) + 60) % 360})`);
+    const PAIRS = {
+      "fraunces-inter":  { display: "'Fraunces', Georgia, serif",           body: "'Inter', system-ui, sans-serif" },
+      "garamond-inter":  { display: "'EB Garamond', Georgia, serif",        body: "'Inter', system-ui, sans-serif" },
+      "cormorant-inter": { display: "'Cormorant Garamond', Georgia, serif", body: "'Inter', system-ui, sans-serif" },
+    };
+    const p = PAIRS[tw.fontPair] || PAIRS["fraunces-inter"];
+    r.style.setProperty("--font-display", p.display);
+    r.style.setProperty("--font-body",    p.body);
+    document.body.dataset.anim = tw.animSpeed;
+  }, [tw]);
+
+  const [tag, setTag] = useState("All");
+  const tags = useMemo(() => ["All", ...Array.from(new Set(ARTICLES.map(a => a.tag)))], []);
+  const filtered = useMemo(
+    () => tag === "All" ? ARTICLES : ARTICLES.filter(a => a.tag === tag),
+    [tag]
+  );
+
+  return (
+    <>
+      <ScrollProgress />
+      <Nav activeKey="articles" musicOn={false} onPlayMusic={() => {}} />
+
+      <section className="wrap page-head">
+        <div className="eyebrow">{t("articles.eyebrow")}</div>
+        <h1>{t("articles.h1")}</h1>
+        <p>{t("articles.desc")}</p>
+      </section>
+
+      <section className="wrap" style={{ marginTop: 12 }}>
+        <Reveal className="filter-row" as="div">
+          {tags.map((g) => (
+            <button key={g} className="chip" aria-pressed={tag === g} onClick={() => setTag(g)}>
+              {g === "All" ? t("articles.all") : t("genre." + g)}
+            </button>
+          ))}
+          <span className="chip" style={{ borderStyle: "dashed", color: "var(--ink-3)" }}>
+            {filtered.length} {filtered.length === 1 ? t("articles.piece") : t("articles.pieces")}
+          </span>
+        </Reveal>
+
+        <div className="articles-grid">
+          {filtered.map((a, i) => (
+            <Reveal key={a.title} delay={i * 60}>
+              <a href="Preview.html" className="article-card glass">
+                <div className="article-cover">
+                  <Cover tone={a.cover} title={d(a, "title")} author={t("genre." + a.tag)} />
+                </div>
+                <div className="article-meta">
+                  <span style={{ color: "var(--accent)" }}>●</span>
+                  <span>{t("genre." + a.tag)}</span>
+                  <span>·</span>
+                  <span>{a.minutes} {t("articles.minRead")}</span>
+                </div>
+                <h3 className="article-h">{d(a, "title")}</h3>
+                <p className="article-dek">{d(a, "dek")}</p>
+                <div className="article-foot">
+                  <span>{a.date}</span>
+                  <span>{t("articles.read")}</span>
+                </div>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <Newsletter />
+      <Footer />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label={t("tweaks.theme")} />
+        <TweakRadio label={t("tweaks.mood")} value={tw.theme}
+          options={[{value:"light",label:t("tweaks.light")},{value:"navy",label:t("tweaks.navy")}]}
+          onChange={(v)=>setTweak("theme",v)} />
+        <TweakSlider label={t("tweaks.accentHue")} min={0} max={360} step={5} value={tw.accentHue} unit="°"
+          onChange={(v)=>setTweak("accentHue",v)} />
+        <TweakSection label={t("tweaks.typography")} />
+        <TweakSelect label={t("tweaks.typePairing")} value={tw.fontPair}
+          options={[
+            {value:"fraunces-inter",label:"Fraunces · Inter"},
+            {value:"garamond-inter",label:"EB Garamond · Inter"},
+            {value:"cormorant-inter",label:"Cormorant · Inter"},
+          ]}
+          onChange={(v)=>setTweak("fontPair",v)} />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(
+  <LangProvider><ArticlesPage /></LangProvider>
+);
+</script>
+</body>
+</html>

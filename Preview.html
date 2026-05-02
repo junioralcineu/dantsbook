@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dant's — Free Preview · Meditations</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="styles.css" />
+
+<style>
+  .reader-shell {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(40px, 6vw, 80px) 28px 80px;
+  }
+  .reader-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; margin-bottom: 32px;
+    border-top: .5px solid var(--line); border-bottom: .5px solid var(--line);
+    font: 500 11.5px/1 var(--font-body); color: var(--ink-3);
+    letter-spacing: .12em; text-transform: uppercase;
+  }
+  .reader-cover {
+    display: flex; justify-content: center; margin-bottom: 36px;
+  }
+  .reader-cover .cover { width: 200px; aspect-ratio: 2/3; }
+  .reader-title {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(38px, 5vw, 60px);
+    letter-spacing: -.02em; line-height: 1.05;
+    margin: 0; text-align: center; text-wrap: balance;
+  }
+  .reader-author {
+    text-align: center; margin-top: 14px;
+    font: 500 12.5px/1 var(--font-body);
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .reader-divider {
+    display: flex; justify-content: center; align-items: center;
+    gap: 14px; margin: 48px 0;
+    color: var(--accent);
+  }
+  .reader-divider .line { flex: 1; height: 1px; background: var(--line); max-width: 80px; }
+  .reader-divider .ornament { font-size: 14px; }
+
+  .reader-body p {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 1.65;
+    color: var(--ink);
+    margin: 0 0 1.5em;
+    text-wrap: pretty;
+  }
+  /* drop cap on first paragraph */
+  .reader-body p:first-of-type::first-letter {
+    font-family: var(--font-display);
+    float: left;
+    font-size: 5.4em;
+    line-height: .92;
+    padding: 4px 12px 0 0;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .reader-end {
+    margin: 60px 0 0; padding: 28px;
+    border-radius: 18px; text-align: center;
+  }
+  .reader-end h3 {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(22px, 2.4vw, 28px); letter-spacing: -.01em;
+    margin: 12px 0 8px;
+  }
+  .reader-actions {
+    display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap;
+  }
+
+  /* reading progress on this page tracks the article specifically */
+  .article-progress {
+    position: fixed; left: 0; right: 0; top: 0; height: 2px; background: transparent;
+    z-index: 60;
+  }
+  .article-progress > span {
+    display: block; height: 100%; background: var(--accent); width: 0;
+    box-shadow: 0 0 8px var(--accent);
+  }
+</style>
+
+<script type="application/json" id="speaker-notes">[]</script>
+</head>
+<body>
+
+<div class="bg-stage" aria-hidden="true"></div>
+<div class="article-progress"><span id="article-prog" /></div>
+
+<div id="app"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="i18n.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel">
+
+const { useEffect, useState } = React;
+
+function PreviewPage() {
+  const { lang, t } = useLang();
+  const [tw, setTweak] = useTweaks(/*EDITMODE-BEGIN*/{
+    "theme": "light",
+    "accentHue": 35,
+    "fontPair": "fraunces-inter",
+    "animSpeed": "normal",
+    "fontSize": 21
+  }/*EDITMODE-END*/);
+
+  useEffect(() => {
+    const r = document.documentElement;
+    r.setAttribute("data-theme", tw.theme === "navy" ? "navy" : "light");
+    r.style.setProperty("--accent",   `oklch(0.58 0.13 ${tw.accentHue})`);
+    r.style.setProperty("--accent-2", `oklch(0.58 0.13 ${(Number(tw.accentHue) + 60) % 360})`);
+    const PAIRS = {
+      "fraunces-inter":  { display: "'Fraunces', Georgia, serif",           body: "'Inter', system-ui, sans-serif" },
+      "garamond-inter":  { display: "'EB Garamond', Georgia, serif",        body: "'Inter', system-ui, sans-serif" },
+      "cormorant-inter": { display: "'Cormorant Garamond', Georgia, serif", body: "'Inter', system-ui, sans-serif" },
+    };
+    const p = PAIRS[tw.fontPair] || PAIRS["fraunces-inter"];
+    r.style.setProperty("--font-display", p.display);
+    r.style.setProperty("--font-body",    p.body);
+    document.body.dataset.anim = tw.animSpeed;
+  }, [tw]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const article = document.querySelector(".reader-body");
+      if (!article) return;
+      const rect = article.getBoundingClientRect();
+      const total = rect.height;
+      const passed = Math.max(0, Math.min(total, window.innerHeight - rect.top));
+      const pct = total > 0 ? Math.min(100, (passed / total) * 100) : 0;
+      const el = document.getElementById("article-prog");
+      if (el) el.style.width = pct + "%";
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const excerpt = lang === "pt" ? (PREVIEW_BOOK.excerpt_pt || PREVIEW_BOOK.excerpt) : PREVIEW_BOOK.excerpt;
+
+  return (
+    <>
+      <Nav activeKey="home" musicOn={false} onPlayMusic={() => {}} />
+
+      <main className="reader-shell">
+        <div className="reader-meta">
+          <span>{t("preview.free")}</span>
+          <span>{t("preview.minRead")}</span>
+        </div>
+
+        <Reveal className="reader-cover">
+          <Cover tone={PREVIEW_BOOK.cover} title={PREVIEW_BOOK.title} author={PREVIEW_BOOK.author} size="lg" />
+        </Reveal>
+
+        <Reveal as="h1" className="reader-title" delay={100}>
+          {PREVIEW_BOOK.title}
+        </Reveal>
+        <Reveal className="reader-author" delay={180}>
+          {PREVIEW_BOOK.author} · {PREVIEW_BOOK.translator}
+        </Reveal>
+
+        <div className="reader-divider" aria-hidden="true">
+          <span className="line" />
+          <span className="ornament">❦</span>
+          <span className="line" />
+        </div>
+
+        <article className="reader-body" style={{ fontSize: tw.fontSize + "px" }}>
+          {excerpt.map((p, i) => (
+            <Reveal key={i} as="p" delay={i * 40}>{p}</Reveal>
+          ))}
+        </article>
+
+        <div className="reader-divider" aria-hidden="true">
+          <span className="line" />
+          <span className="ornament">❦</span>
+          <span className="line" />
+        </div>
+
+        <Reveal>
+          <div className="reader-end glass">
+            <div className="eyebrow">{t("preview.endEyebrow")}</div>
+            <h3>{t("preview.endH3")}</h3>
+            <p className="body-m" style={{ maxWidth: "48ch", margin: "0 auto", color: "var(--ink-2)" }}>
+              {t("preview.endBody")}
+            </p>
+            <div className="reader-actions">
+              <a className="pill solid" href="#" rel="sponsored noopener">{t("featured.buy")}</a>
+              <a className="pill" href="Articles.html">{t("preview.readMore")}</a>
+              <a className="pill ghost" href="Dants Book Blog.html">{t("preview.backJournal")}</a>
+            </div>
+            <div className="disclosure" style={{ marginTop: 14 }}>
+              {t("featured.disclosure")}
+            </div>
+          </div>
+        </Reveal>
+      </main>
+
+      <Footer />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label={t("tweaks.reader")} />
+        <TweakSlider label={t("tweaks.bodySize")} min={16} max={28} step={1} value={tw.fontSize} unit="px"
+          onChange={(v)=>setTweak("fontSize",v)} />
+        <TweakSection label={t("tweaks.theme")} />
+        <TweakRadio label={t("tweaks.mood")} value={tw.theme}
+          options={[{value:"light",label:t("tweaks.light")},{value:"navy",label:t("tweaks.navy")}]}
+          onChange={(v)=>setTweak("theme",v)} />
+        <TweakSlider label={t("tweaks.accentHue")} min={0} max={360} step={5} value={tw.accentHue} unit="°"
+          onChange={(v)=>setTweak("accentHue",v)} />
+        <TweakSection label={t("tweaks.typography")} />
+        <TweakSelect label={t("tweaks.typePairing")} value={tw.fontPair}
+          options={[
+            {value:"fraunces-inter",label:"Fraunces · Inter"},
+            {value:"garamond-inter",label:"EB Garamond · Inter"},
+            {value:"cormorant-inter",label:"Cormorant · Inter"},
+          ]}
+          onChange={(v)=>setTweak("fontPair",v)} />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(
+  <LangProvider><PreviewPage /></LangProvider>
+);
+</script>
+</body>
+</html>
