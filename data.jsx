@@ -11,6 +11,7 @@ const QUOTE_OF_WEEK = {
 const CURRENTLY_READING = [
   {
     title: "Meditations",
+    title_pt: "Meditações",
     author: "Marcus Aurelius",
     pages: 304,
     page: 187,
@@ -20,6 +21,7 @@ const CURRENTLY_READING = [
   },
   {
     title: "The Brothers Karamazov",
+    title_pt: "Os Irmãos Karamázov",
     author: "Fyodor Dostoevsky",
     pages: 796,
     page: 412,
@@ -29,6 +31,7 @@ const CURRENTLY_READING = [
   },
   {
     title: "The Histories",
+    title_pt: "As Histórias",
     author: "Herodotus",
     pages: 760,
     page: 95,
@@ -38,6 +41,7 @@ const CURRENTLY_READING = [
   },
   {
     title: "Letters from a Stoic",
+    title_pt: "Cartas de um Estoico",
     author: "Seneca",
     pages: 254,
     page: 220,
@@ -49,6 +53,7 @@ const CURRENTLY_READING = [
 
 const FEATURED = {
   title: "The Republic",
+  title_pt: "A República",
   author: "Plato",
   translator: "translated by C. D. C. Reeve",
   rating: 5,
@@ -126,11 +131,11 @@ const COLLECTIONS = [
 const ALL_GENRES = ["All", "Philosophy", "Classics", "Fiction", "Essays"];
 
 const NAV_LINKS = [
-  { label: "Journal",  href: "Dants Book Blog.html",       key: "home" },
+  { label: "Journal",  href: "index.html",       key: "home" },
   { label: "Articles", href: "Articles.html",              key: "articles" },
   { label: "Reading",  href: "Reading.html",               key: "reading" },
   { label: "Opinions", href: "Opinions.html",              key: "opinions" },
-  { label: "About",    href: "Dants Book Blog.html#about", key: "about" },
+  { label: "About",    href: "index.html#about", key: "about" },
 ];
 
 // ── Articles page content ─────────────────────────────────────────
@@ -280,6 +285,7 @@ const POSTER_QUOTE = {
 // ── Free preview content ──────────────────────────────────────────
 const PREVIEW_BOOK = {
   title: "Meditations",
+  title_pt: "Meditações",
   author: "Marcus Aurelius",
   translator: "Translated by Gregory Hays",
   cover: "cv-ink",
@@ -338,8 +344,58 @@ const ENCOURAGEMENTS_PT = [
   "Uma hora tranquila vale mais do que a maioria das pessoas tem.",
 ];
 
+// ── Reviews ───────────────────────────────────────────────────────
+const REVIEWS = [
+  {
+    id: "white-nights",
+    title:    { en: "White Nights",         pt: "Noites Brancas"      },
+    author:   { en: "Fyodor Dostoyevsky",   pt: "Fiódor Dostoiévski"  },
+    category: "Classic",
+    cover:    "cv-navy",
+    rating:   5,
+    affiliateUrl: "https://www.amazon.com.br/s?k=Noites+Brancas+Dostoiévski+Penguin+Companhia",
+    affiliateAfterParagraph: 5,
+    content: {
+      en: [
+        "You know that feeling of walking alone late at night? The street completely empty, the silence… it feels like your thoughts start speaking louder than the city itself. That's exactly the atmosphere Dostoyevsky creates from the very first pages of White Nights (or Belye nochi — Белые ночи, in the original Russian).",
+
+        "The whole story is set in St. Petersburg, right around that time of year when the so-called \"white nights\" happen — a phenomenon where the sun sets but the sky never truly gets dark. It stays light all night long. And that's not just a backdrop; it's the perfect portrait of how the mind of our protagonist works, a man we only ever know as \"the Dreamer\" (the Mechtatel — Мечтатель).",
+
+        "The Dreamer doesn't fit very well into the real world. No close ties, no real friendships. He spends his days wandering the city, making up stories in his head about the faces of buildings. In one of my favourite passages, he confesses his own situation: \"I am a dreamer; I have so little real life that I look upon such moments as this, even now, as a rarity, and I cannot but repeat them in my dreams.\"",
+
+        "He almost makes peace with that loneliness, turning his imagination into the only place where he feels safe. But the spell breaks the moment he crosses a bridge and runs into Nastenka. She's there, crying, stuck in a wait that hurts too much. That's when two solitudes meet, and we watch the beautiful anguish of a completely idealised love that lasts exactly four nights.",
+
+        "What really got me thinking during this read was stopping to consider who wrote it. Dostoyevsky was only 26 at the time — full of ideals, living under a deeply repressive regime, meeting in secret to read banned books and dream of freedom. White Nights carries a lot of that youthful energy, the feeling of someone walking right along the edge. And then, just a few months after publishing it, he was arrested, put through a horrifying mock execution, and sent to hard labour in Siberia.",
+
+        "I think that's why this Penguin Companhia edition ends up feeling so special: it's as if it preserves his last romantic breath, before prison and suffering hardened his vision of the world for good. And here's a detail that changes the whole experience: the translation. This edition was translated by Rubens Figueiredo, simply one of the foremost specialists in Russian literature in Brazil. He translates directly from the original, which means you can feel the exact cadence, rhythm and melancholy of the text — without that stilted filter of indirect translations. It's pure Dostoyevsky on the page.",
+
+        "It's wild to think that, so much time later, this story still hits that hard. At the end of the day, it's about how we all build our own bubbles and illusions when reality gets too heavy to carry. The ending of the book is that inevitable gut-punch of reality knocking at the door.",
+
+        "The feeling that stays with you when you close the book is perfectly captured in its last and most famous line: \"My God! A whole minute of happiness! Is that really so little for a man's whole life?\" Feeling that flutter from a real connection with someone — even if it only lasts a moment — will always be worth so much more than going through life protected, feeling nothing."
+      ],
+      pt: [
+        "Sabe aquela sensação de andar sozinho de madrugada? A rua completamente vazia, o silêncio... parece que a nossa cabeça começa a falar mais alto que a própria cidade. É exatamente esse clima que o Dostoiévski cria logo nas primeiras páginas de Noites Brancas (ou Belye nochi — Белые ночи, no original em russo).",
+
+        "A história toda se passa em São Petersburgo, bem naquela época do ano onde aconteciam as tais \"noites brancas\" – um fenômeno onde o sol se punha, mas o céu nunca escurecia de verdade. Ficava claro a noite toda. E isso não é só um detalhe do cenário; é o retrato perfeito de como funciona a mente do nosso protagonista, que conhecemos apenas como \"o Sonhador\" (o Mechtatel — Мечтатель).",
+
+        "Bem, o sonhador não se encaixa muito bem no mundo real. Não tem laços, não tem grandes amizades. Ele passa o tempo vagando pela cidade, criando histórias na própria cabeça para as fachadas dos prédios. Em um dos meus trechos favoritos, ele mesmo confessa a sua condição: \"Sou um sonhador; tenho tão pouca vida real que os momentos como este, como o de agora, considero-os tão raros que não posso deixar de repeti-los nos meus sonhos.\"",
+
+        "Ele meio que se abraça com essa solidão até transformar a própria imaginação no único lugar onde se sente seguro. Mas esse transe acaba no momento em que ele passa por uma ponte e esbarra na Nástienka. Ela está lá, chorando, presa a uma espera que a machuca demais. É nesse momento que essas duas solidões se encontram, e a gente acompanha a angústia bonita de um amor totalmente idealizado que dura exatas quatro noites.",
+
+        "O que me chamou muita atenção nessa leitura foi parar para pensar em quem escreveu isso. O Dostoiévski tinha só 26 anos na época. Ele estava cheio de ideais, vivendo em uma Rússia totalmente repressora, se reunindo escondido para ler livros proibidos e sonhar com liberdade. Noites Brancas carrega muito dessa energia jovem, de alguém caminhando na beira do precipício. Tanto que, poucos meses depois de publicar o livro, ele foi preso, passou por uma simulação de fuzilamento terrível e foi mandado para fazer trabalho forçado na Sibéria.",
+
+        "Eu acho que por isso, essa edição da Penguin Companhia acaba sendo tão especial: é como se ela guardasse o último respiro romântico dele, antes de a prisão e o sofrimento endurecerem de vez a sua visão de mundo. E aqui vai um detalhe que muda toda a experiência: a tradução. Essa edição foi traduzida pelo Rubens Figueiredo, que é simplesmente um dos maiores especialistas em literatura russa no Brasil. Ele traduz direto do original, o que faz com que a gente consiga sentir exatamente a cadência, o ritmo e a melancolia do texto sem aquele filtro engessado de traduções indiretas. É o Dostoiévski puro ali na página.",
+
+        "É muito louco pensar que, tanto tempo depois, essa história ainda bate tão forte na gente. No fim das contas, ela fala sobre como nós também criamos nossas próprias bolhas e ilusões quando a realidade fica pesada demais. O fim do livro é aquele choque de realidade inevitável batendo à porta.",
+
+        "A sensação que fica quando você fecha as páginas resume perfeitamente a última e mais famosa frase do livro: \"Meu Deus! Um minuto inteiro de bem-aventurança! Acaso isso é pouco para toda a vida de um homem?\" Sentir aquele frio na barriga de uma conexão real com alguém — mesmo que passe rápido — sempre vai valer muito mais a pena do que passar a vida inteira protegido, sem sentir nada."
+      ],
+    },
+  },
+];
+
 Object.assign(window, {
   QUOTE_OF_WEEK, CURRENTLY_READING, FEATURED, COLLECTIONS, ALL_GENRES, NAV_LINKS,
-  ARTICLES, OPINIONS, POSTER_QUOTE, PREVIEW_BOOK,
+  ARTICLES, OPINIONS, POSTER_QUOTE, PREVIEW_BOOK, REVIEWS,
   ENCOURAGEMENTS, ENCOURAGEMENTS_PT,
 });

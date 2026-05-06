@@ -103,8 +103,12 @@ function ArticlesPage() {
     document.body.dataset.anim = tw.animSpeed;
   }, [tw]);
 
-  const [tag, setTag] = useState("All");
   const tags = useMemo(() => ["All", ...Array.from(new Set(ARTICLES.map(a => a.tag)))], []);
+  const [tag, setTag] = useState(() => {
+    const hash = window.location.hash.slice(1);
+    const valid = ["All", ...Array.from(new Set(ARTICLES.map(a => a.tag)))];
+    return valid.includes(hash) ? hash : "All";
+  });
   const filtered = useMemo(
     () => tag === "All" ? ARTICLES : ARTICLES.filter(a => a.tag === tag),
     [tag]

@@ -240,7 +240,7 @@ function ReadingRoom() {
       <div className="room dim">
         {/* Top bar */}
         <div className="room-top">
-          <a className="room-back" href="Dants Book Blog.html">
+          <a className="room-back" href="index.html">
             <span style={{ fontSize: 16, lineHeight: 1 }}>‹</span> {t("room.back")}
           </a>
           <div className="room-meta">{t("room.title")} · {weekday}</div>
@@ -361,7 +361,7 @@ function ReadingRoom() {
           <div style={{ marginTop: 14 }}>
             <button className="pill solid" onClick={reset}>{t("room.readAgain")}</button>
             <a className="pill" href="Articles.html">{t("room.browseArticles")}</a>
-            <a className="pill ghost" href="Dants Book Blog.html">{t("room.back")}</a>
+            <a className="pill ghost" href="index.html">{t("room.back")}</a>
           </div>
         </div>
       </div>

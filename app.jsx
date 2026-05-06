@@ -45,6 +45,7 @@ function App() {
       <PosterQuote />
       <CurrentlyReading />
       <Featured />
+      <Reviews />
       <FreePreviewCTA />
       <Collections />
       <About />

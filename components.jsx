@@ -84,7 +84,7 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
     <header className="nav">
       <div className="wrap">
         <div className="nav-inner glass">
-          <a href="Dants Book Blog.html" className="logo">Dant's<sup>®</sup></a>
+          <a href="index.html" className="logo">Dant's<sup>®</sup></a>
           <nav className="nav-links" aria-label="Primary">
             {NAV_LINKS.map((l) =>
               <a key={l.key} href={l.href} className={l.key === activeKey ? "active" : ""}>
@@ -114,7 +114,7 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
               </span>
               {musicOn ? t("nav.ambienceOn") : t("nav.ambience")}
             </button>
-            <a className="pill solid" href="Dants Book Blog.html#newsletter">{t("nav.subscribe")}</a>
+            <a className="pill solid" href="index.html#newsletter">{t("nav.subscribe")}</a>
           </div>
         </div>
       </div>
@@ -186,11 +186,11 @@ function CurrentlyReading() {
           return (
             <Reveal key={b.title} delay={i * 90}>
               <article className="reading-card glass">
-                <Cover tone={b.cover} title={b.title} author={b.author} />
+                <Cover tone={b.cover} title={d(b, "title")} author={b.author} />
                 <div>
                   <div className="eyebrow" style={{ marginBottom: 4 }}>{b.author}</div>
                   <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: 22, margin: "2px 0 8px", letterSpacing: "-.01em" }}>
-                    {b.title}
+                    {d(b, "title")}
                   </h3>
                   <p className="body-m" style={{ margin: 0 }}>{d(b, "note")}</p>
                   <ProgressBar value={pct} />
@@ -223,12 +223,12 @@ function Featured() {
 
       <Reveal>
         <div className="featured glass">
-          <Cover tone={f.cover} title={f.title} author={f.author} size="lg" />
+          <Cover tone={f.cover} title={d(f, "title")} author={f.author} size="lg" />
           <div>
             <div className="meta">
               {f.tags.map((tag) => <span key={tag} className="chip">{tag}</span>)}
             </div>
-            <h3>{f.title}</h3>
+            <h3>{d(f, "title")}</h3>
             <div className="eyebrow" style={{ letterSpacing: ".1em" }}>
               {f.author} · {f.translator}
             </div>
@@ -307,7 +307,7 @@ function Collections() {
                 <p className="body-m" style={{ margin: "6px 0 0" }}>{d(c, "blurb")}</p>
               </div>
               <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <a className="body-m" href="#" style={{ color: "var(--ink)", textDecoration: "none", fontWeight: 500 }}>
+                <a className="body-m" href={`Articles.html#${c.genres[0]}`} style={{ color: "var(--ink)", textDecoration: "none", fontWeight: 500 }}>
                   {t("collections.openList")}
                 </a>
                 <span className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
@@ -456,12 +456,12 @@ function FreePreviewCTA() {
       <Reveal>
         <a href="Preview.html" className="preview-card glass" aria-label={t("previewCta.eyebrow")}>
           <div className="preview-cover-wrap">
-            <Cover tone={PREVIEW_BOOK.cover} title={PREVIEW_BOOK.title} author={PREVIEW_BOOK.author} size="lg" />
+            <Cover tone={PREVIEW_BOOK.cover} title={d(PREVIEW_BOOK, "title")} author={PREVIEW_BOOK.author} size="lg" />
           </div>
           <div className="preview-body">
             <div className="eyebrow">{t("previewCta.eyebrow")}</div>
             <h3 className="display preview-h">
-              {t("previewCta.h3a")} <em>{PREVIEW_BOOK.title}</em>{t("previewCta.h3b")}
+              {t("previewCta.h3a")} <em>{d(PREVIEW_BOOK, "title")}</em>{t("previewCta.h3b")}
             </h3>
             <p className="body-l preview-blurb">
               {d(PREVIEW_BOOK, "blurb")} {t("previewCta.blurbSuffix")}
@@ -479,8 +479,60 @@ function FreePreviewCTA() {
   );
 }
 
+// ── Reviews ──────────────────────────────────────────────────────
+function Reviews() {
+  const { lang, t } = useLang();
+  if (!REVIEWS || !REVIEWS.length) return null;
+  return (
+    <section id="reviews" className="wrap" style={{ marginTop: 120 }}>
+      <Reveal className="sec-head">
+        <div>
+          <div className="eyebrow">{t("reviews.eyebrow")}</div>
+          <h2>{t("reviews.h2")}</h2>
+        </div>
+      </Reveal>
+      <div className="reviews-grid">
+        {REVIEWS.map((r, i) => {
+          const title  = r.title[lang]  || r.title.en;
+          const author = r.author[lang] || r.author.en;
+          const snippet = (r.content[lang] || r.content.en)[0];
+          return (
+            <Reveal key={r.id} delay={i * 80}>
+              <article className="review-card glass">
+                <div>
+                  <Cover tone={r.cover} title={title} author={author} size="lg" />
+                </div>
+                <div>
+                  <div className="eyebrow" style={{ marginBottom: 6 }}>
+                    {r.category}
+                    <span className="star" style={{ marginLeft: 10, fontSize: 13 }}>
+                      {"★".repeat(r.rating)}
+                    </span>
+                  </div>
+                  <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(22px, 2.4vw, 30px)", letterSpacing: "-.015em", margin: "4px 0 6px", textWrap: "balance" }}>
+                    {title}
+                  </h3>
+                  <div className="eyebrow" style={{ marginBottom: 16, letterSpacing: ".1em" }}>
+                    {author}
+                  </div>
+                  <p className="body-m" style={{ margin: "0 0 20px" }}>
+                    {snippet.length > 200 ? snippet.slice(0, 200) + "…" : snippet}
+                  </p>
+                  <a className="pill solid" href={`Review.html#${r.id}`}>
+                    {t("reviews.read")}
+                  </a>
+                </div>
+              </article>
+            </Reveal>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 Object.assign(window, {
   Reveal, Cover, ScrollProgress, ProgressBar,
   Nav, Hero, QuoteSection, CurrentlyReading, Featured, Collections, About, Newsletter, Footer,
-  PosterQuote, FreePreviewCTA,
+  PosterQuote, FreePreviewCTA, Reviews,
 });

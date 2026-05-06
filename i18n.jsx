@@ -53,8 +53,8 @@ const STRINGS = {
 
     // Collections
     "collections.eyebrow": "Reading lists",
-    "collections.h2": "Shelves, not shelves of fame.",
-    "collections.desc": "Curated paths through the canon. Filter by what you're in the mood for — most lists overlap on purpose.",
+    "collections.h2": "Literary Curation",
+    "collections.desc": "Curated reading paths through the canon. Filter by what you're in the mood for — most lists overlap on purpose.",
     "collections.all": "All",
     "collections.openList": "Open list →",
     "collections.books": "books",
@@ -91,6 +91,14 @@ const STRINGS = {
 
     // Footer
     "footer.built": "Built slowly, on purpose.",
+
+    // Reviews section
+    "reviews.eyebrow": "Reading Journal",
+    "reviews.h2": "Books I've read, honestly.",
+    "reviews.read": "Read review →",
+    "reviews.endEyebrow": "More to read",
+    "reviews.endH3": "There's always another book.",
+    "reviews.buy": "Buy on Amazon →",
 
     // Reading room
     "room.back": "Back to journal",
@@ -222,8 +230,8 @@ const STRINGS = {
 
     // Collections
     "collections.eyebrow": "Listas de leitura",
-    "collections.h2": "Prateleiras sem vaidade.",
-    "collections.desc": "Percursos cuidados pelo cânone. Filtra pelo teu estado de espírito — a maioria das listas sobrepõe-se propositadamente.",
+    "collections.h2": "Curadoria Literária",
+    "collections.desc": "Percursos de leitura cuidados pelo cânone. Filtra pelo teu estado de espírito — a maioria das listas sobrepõe-se propositadamente.",
     "collections.all": "Todos",
     "collections.openList": "Abrir lista →",
     "collections.books": "livros",
@@ -260,6 +268,14 @@ const STRINGS = {
 
     // Footer
     "footer.built": "Construído devagar, de propósito.",
+
+    // Reviews section
+    "reviews.eyebrow": "Diário de Leitura",
+    "reviews.h2": "Livros que li, honestamente.",
+    "reviews.read": "Ler resenha →",
+    "reviews.endEyebrow": "Mais para ler",
+    "reviews.endH3": "Há sempre outro livro.",
+    "reviews.buy": "Comprar na Amazon →",
 
     // Reading room
     "room.back": "Voltar ao diário",
