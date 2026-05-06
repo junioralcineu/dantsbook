@@ -2,6 +2,17 @@
 
 const { useEffect, useRef, useState, useMemo } = React;
 
+// ── Week counter (launch date: 10 May 2026) ───────────────────────
+function getWeekNumber() {
+  const launch = new Date(2026, 4, 10); // month is 0-indexed: 4 = May
+  const today  = new Date();
+  today.setHours(0, 0, 0, 0);
+  launch.setHours(0, 0, 0, 0);
+  const diffMs = today - launch;
+  if (diffMs < 0) return 1;                                    // before launch → week 1
+  return Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1; // floor(days/7) + 1
+}
+
 // ── Reveal on scroll ─────────────────────────────────────────────
 function Reveal({ children, delay = 0, as: Tag = "div", className = "", ...rest }) {
   const ref = useRef(null);
@@ -175,10 +186,11 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
 // ── Hero ─────────────────────────────────────────────────────────
 function Hero() {
   const { t } = useLang();
+  const eyebrow = t("hero.eyebrow").replace("{week}", getWeekNumber());
   return (
     <section id="hero" className="hero wrap">
       <Reveal as="div" className="marker" style={{ justifyContent: "center", display: "flex" }}>
-        <span className="line" /><span className="dot" /><span className="eyebrow">{t("hero.eyebrow")}</span><span className="dot" /><span className="line" />
+        <span className="line" /><span className="dot" /><span className="eyebrow">{eyebrow}</span><span className="dot" /><span className="line" />
       </Reveal>
       <Reveal as="h1" className="display" delay={120}>
         {t("hero.h1a")} <em>{t("hero.h1b")}</em>,

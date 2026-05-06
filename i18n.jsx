@@ -14,7 +14,7 @@ const STRINGS = {
     "nav.subscribe": "Subscribe",
 
     // Hero
-    "hero.eyebrow": "A reading journal — week 17",
+    "hero.eyebrow": "A reading journal — week {week}",
     "hero.h1a": "Books I'm reading",
     "hero.h1b": "slowly",
     "hero.h1c": "and the",
@@ -191,7 +191,7 @@ const STRINGS = {
     "nav.subscribe": "Subscrever",
 
     // Hero
-    "hero.eyebrow": "Um diário de leitura — semana 17",
+    "hero.eyebrow": "Um diário de leitura — semana {week}",
     "hero.h1a": "Livros que leio",
     "hero.h1b": "devagar",
     "hero.h1c": "e os",
