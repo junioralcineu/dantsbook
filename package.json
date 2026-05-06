@@ -1,0 +1,9 @@
+{
+  "name": "dantsbook",
+  "version": "1.0.0",
+  "description": "Dant's reading journal — a slow book blog",
+  "private": true,
+  "scripts": {
+    "sitemap": "node generate-sitemap.js"
+  }
+}
