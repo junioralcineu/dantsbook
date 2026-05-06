@@ -80,11 +80,27 @@ function ProgressBar({ value }) {
 // ── Nav ──────────────────────────────────────────────────────────
 function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
   const { lang, t, setLang } = useLang();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const close = () => setMenuOpen(false);
+
+  const LangBtn = ({ onClick }) => (
+    <button
+      className="pill ghost"
+      onClick={onClick}
+      aria-label={lang === "en" ? "Switch to Portuguese" : "Switch to English"}
+      style={{ paddingLeft: 14, paddingRight: 14, minWidth: 44, fontWeight: 600, letterSpacing: ".06em" }}
+    >
+      {lang === "en" ? "PT" : "EN"}
+    </button>
+  );
+
   return (
     <header className="nav">
       <div className="wrap">
         <div className="nav-inner glass">
-          <a href="index.html" className="logo">Dant's<sup>®</sup></a>
+          <a href="index.html" className="logo" onClick={close}>Dant's<sup>®</sup></a>
+
+          {/* Desktop nav links */}
           <nav className="nav-links" aria-label="Primary">
             {NAV_LINKS.map((l) =>
               <a key={l.key} href={l.href} className={l.key === activeKey ? "active" : ""}>
@@ -92,15 +108,10 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
               </a>
             )}
           </nav>
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <button
-              className="pill ghost"
-              onClick={() => setLang(lang === "en" ? "pt" : "en")}
-              aria-label={lang === "en" ? "Switch to Portuguese" : "Switch to English"}
-              style={{ paddingLeft: 14, paddingRight: 14, minWidth: 44, fontWeight: 600, letterSpacing: ".06em" }}
-            >
-              {lang === "en" ? "PT" : "EN"}
-            </button>
+
+          {/* Desktop CTA group */}
+          <div className="nav-cta">
+            <LangBtn onClick={() => setLang(lang === "en" ? "pt" : "en")} />
             <button
               className="pill ghost"
               onClick={onPlayMusic}
@@ -115,6 +126,45 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
               {musicOn ? t("nav.ambienceOn") : t("nav.ambience")}
             </button>
             <a className="pill solid" href="index.html#newsletter">{t("nav.subscribe")}</a>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            className="nav-hamburger"
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? (
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/>
+              </svg>
+            ) : (
+              <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor">
+                <rect width="18" height="2" rx="1"/><rect y="5.5" width="13" height="2" rx="1"/><rect y="11" width="18" height="2" rx="1"/>
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Mobile dropdown */}
+        <div className={`nav-mobile${menuOpen ? " open" : ""}`} aria-hidden={!menuOpen}>
+          <div className="nav-mobile-inner">
+            <nav className="nav-mobile-links" aria-label="Mobile navigation">
+              {NAV_LINKS.map((l) =>
+                <a key={l.key} href={l.href}
+                   className={l.key === activeKey ? "active" : ""}
+                   onClick={close}>
+                  {t("nav." + l.key)}
+                </a>
+              )}
+            </nav>
+            <div className="nav-mobile-cta">
+              <LangBtn onClick={() => { setLang(lang === "en" ? "pt" : "en"); close(); }} />
+              <a className="pill solid" href="index.html#newsletter" onClick={close}>
+                {t("nav.subscribe")}
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -169,7 +219,7 @@ function QuoteSection() {
 function CurrentlyReading() {
   const { t, d } = useLang();
   return (
-    <section id="currently" className="wrap" style={{ marginTop: 96 }}>
+    <section id="currently" className="wrap" style={{ marginTop: "clamp(48px, 10vw, 96px)" }}>
       <Reveal className="sec-head">
         <div>
           <div className="eyebrow">{t("currently.eyebrow")}</div>
@@ -213,7 +263,7 @@ function Featured() {
   const { t, d } = useLang();
   const f = FEATURED;
   return (
-    <section id="featured" className="wrap" style={{ marginTop: 120 }}>
+    <section id="featured" className="wrap" style={{ marginTop: "clamp(56px, 10vw, 120px)" }}>
       <Reveal className="sec-head">
         <div>
           <div className="eyebrow">{t("featured.eyebrow")}</div>
@@ -264,7 +314,7 @@ function Collections() {
   );
 
   return (
-    <section id="lists" className="wrap" style={{ marginTop: 120 }}>
+    <section id="lists" className="wrap" style={{ marginTop: "clamp(56px, 10vw, 120px)" }}>
       <Reveal className="sec-head">
         <div>
           <div className="eyebrow">{t("collections.eyebrow")}</div>
@@ -326,7 +376,7 @@ function Collections() {
 function About() {
   const { t } = useLang();
   return (
-    <section id="about" className="wrap" style={{ marginTop: 140 }}>
+    <section id="about" className="wrap" style={{ marginTop: "clamp(64px, 12vw, 140px)" }}>
       <div className="about">
         <Reveal>
           <div className="eyebrow">{t("about.eyebrow")}</div>
@@ -362,7 +412,7 @@ function Newsletter() {
     setStatus(ok ? "sent" : "invalid");
   };
   return (
-    <section id="newsletter" className="wrap" style={{ marginTop: 140 }}>
+    <section id="newsletter" className="wrap" style={{ marginTop: "clamp(64px, 12vw, 140px)" }}>
       <Reveal>
         <div className="news glass">
           <div className="eyebrow">{t("news.eyebrow")}</div>
@@ -411,7 +461,7 @@ function Footer() {
 function PosterQuote() {
   const { t, d } = useLang();
   return (
-    <section className="wrap" style={{ marginTop: 120 }}>
+    <section className="wrap" style={{ marginTop: "clamp(56px, 10vw, 120px)" }}>
       <Reveal className="sec-head">
         <div>
           <div className="eyebrow">{t("poster.editionPrefix")} {POSTER_QUOTE.number}</div>
@@ -452,7 +502,7 @@ function PosterQuote() {
 function FreePreviewCTA() {
   const { t, d } = useLang();
   return (
-    <section id="preview" className="wrap" style={{ marginTop: 120 }}>
+    <section id="preview" className="wrap" style={{ marginTop: "clamp(56px, 10vw, 120px)" }}>
       <Reveal>
         <a href="Preview.html" className="preview-card glass" aria-label={t("previewCta.eyebrow")}>
           <div className="preview-cover-wrap">
@@ -484,7 +534,7 @@ function Reviews() {
   const { lang, t } = useLang();
   if (!REVIEWS || !REVIEWS.length) return null;
   return (
-    <section id="reviews" className="wrap" style={{ marginTop: 120 }}>
+    <section id="reviews" className="wrap" style={{ marginTop: "clamp(56px, 10vw, 120px)" }}>
       <Reveal className="sec-head">
         <div>
           <div className="eyebrow">{t("reviews.eyebrow")}</div>
