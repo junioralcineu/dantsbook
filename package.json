@@ -4,6 +4,12 @@
   "description": "Dant's reading journal — a slow book blog",
   "private": true,
   "scripts": {
-    "sitemap": "node generate-sitemap.js"
+    "sitemap": "node generate-sitemap.js",
+    "build": "npx babel tweaks-panel.jsx -o tweaks-panel.js && npx babel i18n.jsx -o i18n.js && npx babel data.jsx -o data.js && npx babel components.jsx -o components.js && npx babel reading.jsx -o reading.js && npx babel app.jsx -o app.js && npx babel articles-page.jsx -o articles-page.js && npx babel opinions-page.jsx -o opinions-page.js && npx babel preview-page.jsx -o preview-page.js && npx babel review-page.jsx -o review-page.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-react": "^7.28.5"
   }
 }
