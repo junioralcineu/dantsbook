@@ -344,6 +344,47 @@ const ENCOURAGEMENTS_PT = [
   "Uma hora tranquila vale mais do que a maioria das pessoas tem.",
 ];
 
+// ── Daily poster quotes ───────────────────────────────────────────
+// EN → American authors  |  PT → Brazilian authors
+// getDailyQuote(lang) uses the day number since Unix epoch as index,
+// so every visitor sees the same quote on the same day.
+
+const DAILY_QUOTES_EN = [
+  { text: "The world breaks everyone, and afterward, some are strong at the broken places.",          source: "Ernest Hemingway · A Farewell to Arms" },
+  { text: "So we beat on, boats against the current, borne back ceaselessly into the past.",          source: "F. Scott Fitzgerald · The Great Gatsby" },
+  { text: "The past is never dead. It's not even past.",                                              source: "William Faulkner · Requiem for a Nun" },
+  { text: "Definitions belong to the definers, not the defined.",                                     source: "Toni Morrison · Beloved" },
+  { text: "You never really understand a person until you consider things from his point of view.",   source: "Harper Lee · To Kill a Mockingbird" },
+  { text: "I went to the woods because I wished to live deliberately.",                               source: "Henry David Thoreau · Walden" },
+  { text: "I am large, I contain multitudes.",                                                        source: "Walt Whitman · Song of Myself" },
+  { text: "All that we see or seem is but a dream within a dream.",                                   source: "Edgar Allan Poe · A Dream Within a Dream" },
+  { text: "And now that you don't have to be perfect, you can be good.",                              source: "John Steinbeck · East of Eden" },
+  { text: "You have to carry the fire.",                                                              source: "Cormac McCarthy · The Road" },
+  { text: "I took a deep breath and listened to the old brag of my heart: I am, I am, I am.",        source: "Sylvia Plath · The Bell Jar" },
+  { text: "The truth does not change according to our ability to stomach it.",                        source: "Flannery O'Connor · Letters" },
+];
+
+const DAILY_QUOTES_PT = [
+  { text: "Liberdade é pouco. O que desejo ainda não tem nome.",                                      source: "Clarice Lispector · A Paixão Segundo G.H." },
+  { text: "Mestre não é quem sempre ensina, mas quem de repente aprende.",                            source: "Guimarães Rosa · Grande Sertão: Veredas" },
+  { text: "Que não seja imortal, posto que é chama, mas que seja infinito enquanto dure.",            source: "Vinicius de Moraes · Soneto da Fidelidade" },
+  { text: "Não tive filhos, não transmiti a nenhuma criatura o legado da nossa miséria.",             source: "Machado de Assis · Memórias Póstumas de Brás Cubas" },
+  { text: "No meio do caminho tinha uma pedra, tinha uma pedra no meio do caminho.",                  source: "Carlos Drummond de Andrade · No Meio do Caminho" },
+  { text: "O que não sei fazer, desmancho em poesia.",                                                source: "Manoel de Barros" },
+  { text: "Escrever é uma maldição que salva.",                                                       source: "Clarice Lispector · A Descoberta do Mundo" },
+  { text: "Sou um tupi tangendo um alaúde.",                                                         source: "Mário de Andrade" },
+  { text: "O sertão é do tamanho do mundo.",                                                         source: "Guimarães Rosa · Grande Sertão: Veredas" },
+  { text: "Vou-me embora pra Pasárgada, lá sou amigo do rei.",                                       source: "Manuel Bandeira" },
+  { text: "Não quero faca nem queijo. Quero a fome.",                                                 source: "Adélia Prado · Bagagem" },
+  { text: "Feliz aquele que transfere o que sabe e aprende o que ensina.",                            source: "Cora Coralina" },
+];
+
+function getDailyQuote(lang) {
+  const quotes = lang === "pt" ? DAILY_QUOTES_PT : DAILY_QUOTES_EN;
+  const day = Math.floor(Date.now() / (1000 * 60 * 60 * 24)); // days since Unix epoch
+  return quotes[day % quotes.length];
+}
+
 // ── Reviews ───────────────────────────────────────────────────────
 const REVIEWS = [
   {
@@ -398,4 +439,5 @@ Object.assign(window, {
   QUOTE_OF_WEEK, CURRENTLY_READING, FEATURED, COLLECTIONS, ALL_GENRES, NAV_LINKS,
   ARTICLES, OPINIONS, POSTER_QUOTE, PREVIEW_BOOK, REVIEWS,
   ENCOURAGEMENTS, ENCOURAGEMENTS_PT,
+  DAILY_QUOTES_EN, DAILY_QUOTES_PT, getDailyQuote,
 });

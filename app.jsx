@@ -102,19 +102,6 @@ function App() {
         />
       </TweaksPanel>
 
-      {musicOn && (
-        <div
-          className="glass"
-          style={{
-            position: "fixed", left: 16, bottom: 16, padding: "10px 14px",
-            borderRadius: 999, fontSize: 12, color: "var(--ink-2)",
-            display: "flex", gap: 10, alignItems: "center", zIndex: 40,
-          }}
-        >
-          <span style={{ width: 8, height: 8, borderRadius: 999, background: "var(--accent)", boxShadow: "0 0 8px var(--accent)" }} />
-          {t("music.hint")}
-        </div>
-      )}
     </>
   );
 }

@@ -88,11 +88,95 @@ function ProgressBar({ value }) {
   );
 }
 
+// ── Spotify ambient widget ────────────────────────────────────────
+const SPOTIFY_SIZES = [
+  { key: "S", h: 152,  label: "Mini"   },
+  { key: "M", h: 352,  label: "Normal" },
+  { key: "L", h: 500,  label: "Grande" },
+];
+
+const SPOTIFY_KEY = "dants.spotify";
+
+function SpotifyWidget({ open, onClose }) {
+  // If restoring from localStorage, load the iframe immediately
+  const [loaded, setLoaded] = React.useState(open);
+  const [size, setSize] = React.useState(() => {
+    try { return localStorage.getItem(SPOTIFY_KEY + ".size") || "M"; }
+    catch (e) { return "M"; }
+  });
+
+  // Load iframe as soon as widget opens for the first time
+  React.useEffect(() => { if (open && !loaded) setLoaded(true); }, [open]);
+
+  // Persist open state so next page auto-reopens the widget
+  React.useEffect(() => {
+    try {
+      if (open) localStorage.setItem(SPOTIFY_KEY + ".open", "1");
+      else      localStorage.removeItem(SPOTIFY_KEY + ".open");
+    } catch (e) {}
+  }, [open]);
+
+  // Persist chosen size
+  React.useEffect(() => {
+    try { localStorage.setItem(SPOTIFY_KEY + ".size", size); } catch (e) {}
+  }, [size]);
+
+  const current = SPOTIFY_SIZES.find(s => s.key === size);
+
+  return (
+    <div className={`spotify-widget${open ? " open" : ""}`} aria-hidden={!open} role="region" aria-label="Ambient music player">
+      <div className="spotify-widget-header">
+        <span className="spotify-widget-label">Ambiente · Dant's</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+          {SPOTIFY_SIZES.map(s => (
+            <button
+              key={s.key}
+              className={`spotify-size-btn${size === s.key ? " active" : ""}`}
+              onClick={() => setSize(s.key)}
+              title={s.label}
+            >
+              {s.key}
+            </button>
+          ))}
+          <button className="spotify-close" onClick={onClose} aria-label="Fechar player">✕</button>
+        </div>
+      </div>
+
+      <div className="spotify-iframe-wrap" style={{ height: current.h }}>
+        {loaded && (
+          <iframe
+            src="https://open.spotify.com/embed/playlist/34xu1Ho7uHzBAKLJ0GqGks?utm_source=generator&theme=0&autoplay=1"
+            width="100%"
+            height={current.h}
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            title="Dant's Reading Ambience"
+            style={{ borderRadius: 12, display: "block" }}
+          />
+        )}
+      </div>
+
+      <p className="spotify-login-note">
+        Faça login no Spotify para ouvir a música completa.
+      </p>
+    </div>
+  );
+}
+
 // ── Nav ──────────────────────────────────────────────────────────
 function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
   const { lang, t, setLang } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [spotifyOpen, setSpotifyOpen] = useState(() => {
+    try { return localStorage.getItem(SPOTIFY_KEY + ".open") === "1"; }
+    catch (e) { return false; }
+  });
   const close = () => setMenuOpen(false);
+  const toggleSpotify = () => {
+    setSpotifyOpen(o => !o);
+    if (onPlayMusic) onPlayMusic();
+  };
 
   const LangBtn = ({ onClick }) => (
     <button
@@ -106,6 +190,7 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
   );
 
   return (
+    <>
     <header className="nav">
       <div className="wrap">
         <div className="nav-inner glass">
@@ -125,16 +210,14 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
             <LangBtn onClick={() => setLang(lang === "en" ? "pt" : "en")} />
             <button
               className="pill ghost"
-              onClick={onPlayMusic}
-              aria-pressed={musicOn}
+              onClick={toggleSpotify}
+              aria-pressed={spotifyOpen}
               title={t("nav.ambience")}
               style={{ paddingLeft: 14, paddingRight: 14 }}>
-              <span style={{ display: "inline-flex", gap: 3, alignItems: "end", height: 12 }}>
-                <i style={{ width: 2, background: "currentColor", height: musicOn ? 10 : 4, transition: "height .25s" }} />
-                <i style={{ width: 2, background: "currentColor", height: musicOn ? 6 : 8, transition: "height .3s" }} />
-                <i style={{ width: 2, background: "currentColor", height: musicOn ? 12 : 5, transition: "height .35s" }} />
+              <span className={`amb-bars${spotifyOpen ? " playing" : ""}`}>
+                <i /><i /><i />
               </span>
-              {musicOn ? t("nav.ambienceOn") : t("nav.ambience")}
+              {spotifyOpen ? t("nav.ambienceOn") : t("nav.ambience")}
             </button>
             <a className="pill solid" href="index.html#newsletter">{t("nav.subscribe")}</a>
           </div>
@@ -180,6 +263,8 @@ function Nav({ onPlayMusic, musicOn, activeKey = "home" }) {
         </div>
       </div>
     </header>
+    <SpotifyWidget open={spotifyOpen} onClose={() => setSpotifyOpen(false)} />
+    </>
   );
 }
 
@@ -471,7 +556,8 @@ function Footer() {
 
 // ── Aesthetic poster: classic-book quote ─────────────────────────
 function PosterQuote() {
-  const { t, d } = useLang();
+  const { lang, t, d } = useLang();
+  const quote = getDailyQuote(lang);
   return (
     <section className="wrap" style={{ marginTop: "clamp(56px, 10vw, 120px)" }}>
       <Reveal className="sec-head">
@@ -495,8 +581,8 @@ function PosterQuote() {
             <div className="poster-rule" />
             <div className="poster-body">
               <span className="poster-mark">"</span>
-              <p className="poster-text">{d(POSTER_QUOTE, "text")}</p>
-              <span className="poster-cite">— {POSTER_QUOTE.source}</span>
+              <p className="poster-text">{quote.text}</p>
+              <span className="poster-cite">— {quote.source}</span>
             </div>
             <div className="poster-rule" />
             <div className="poster-foot">
