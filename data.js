@@ -51,6 +51,8 @@ const FEATURED = {
   translator: "translated by C. D. C. Reeve",
   rating: 5,
   tags: ["Philosophy", "Classics", "Political theory"],
+  image: "bookimages/91nYfNvYa7L._SL1500_.jpg",
+  buyUrl: "https://amzn.to/4cXORM3",
   blurb: "I came back to The Republic this winter expecting a familiar conversation and found a book that argues with me from the first page. Plato isn't building a city — he's building a mirror. What you see in it depends on how honestly you're willing to look.",
   blurb_pt: "Voltei à República neste inverno à espera de uma conversa familiar e encontrei um livro que discute comigo desde a primeira página. Platão não está a construir uma cidade — está a construir um espelho. O que vês nele depende de quão honestamente estás disposto a olhar.",
   pull: "A book that asks what justice would feel like if you could afford to be honest about it.",

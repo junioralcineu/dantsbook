@@ -370,7 +370,20 @@ function Featured() {
 
       <Reveal>
         <div className="featured glass">
-          <Cover tone={f.cover} title={d(f, "title")} author={f.author} size="lg" />
+          {f.image ? (
+            <img
+              src={f.image}
+              alt={`${d(f, "title")} — ${f.author}`}
+              style={{
+                width: "100%", maxWidth: 280,
+                aspectRatio: "2/3", objectFit: "cover",
+                borderRadius: 6,
+                boxShadow: "inset 8px 0 12px -10px rgba(0,0,0,.35), 0 6px 24px -8px rgba(40,30,15,.45), 0 2px 4px rgba(40,30,15,.15)",
+              }}
+            />
+          ) : (
+            <Cover tone={f.cover} title={d(f, "title")} author={f.author} size="lg" />
+          )}
           <div>
             <div className="meta">
               {f.tags.map((tag) => <span key={tag} className="chip">{tag}</span>)}
@@ -388,7 +401,7 @@ function Featured() {
             </p>
             <div className="price-row">
               <span className="price"><s>{f.priceWas}</s>{f.priceNow}</span>
-              <a className="pill solid" href="#" rel="sponsored noopener">{t("featured.buy")}</a>
+              <a className="pill solid" href={f.buyUrl || "#"} target="_blank" rel="sponsored noopener">{t("featured.buy")}</a>
               <a className="pill" href="#">{t("featured.notes")}</a>
             </div>
             <div className="disclosure">

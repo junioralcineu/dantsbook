@@ -518,7 +518,18 @@ function Featured() {
     className: "eyebrow"
   }, t("featured.eyebrow")), /*#__PURE__*/React.createElement("h2", null, t("featured.h2")))), /*#__PURE__*/React.createElement(Reveal, null, /*#__PURE__*/React.createElement("div", {
     className: "featured glass"
-  }, /*#__PURE__*/React.createElement(Cover, {
+  }, f.image ? /*#__PURE__*/React.createElement("img", {
+    src: f.image,
+    alt: `${d(f, "title")} — ${f.author}`,
+    style: {
+      width: "100%",
+      maxWidth: 280,
+      aspectRatio: "2/3",
+      objectFit: "cover",
+      borderRadius: 6,
+      boxShadow: "inset 8px 0 12px -10px rgba(0,0,0,.35), 0 6px 24px -8px rgba(40,30,15,.45), 0 2px 4px rgba(40,30,15,.15)"
+    }
+  }) : /*#__PURE__*/React.createElement(Cover, {
     tone: f.cover,
     title: d(f, "title"),
     author: f.author,
@@ -561,7 +572,8 @@ function Featured() {
     className: "price"
   }, /*#__PURE__*/React.createElement("s", null, f.priceWas), f.priceNow), /*#__PURE__*/React.createElement("a", {
     className: "pill solid",
-    href: "#",
+    href: f.buyUrl || "#",
+    target: "_blank",
     rel: "sponsored noopener"
   }, t("featured.buy")), /*#__PURE__*/React.createElement("a", {
     className: "pill",
