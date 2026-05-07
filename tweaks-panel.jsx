@@ -166,8 +166,7 @@ function TweaksPanel({ title = 'Tweaks', children }) {
   const clampToViewport = React.useCallback(() => {
     const panel = dragRef.current;
     if (!panel) return;
-    const rect = panel.getBoundingClientRect();
-    const w = rect.width, h = rect.height;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
     const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
     const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
     offsetRef.current = {
