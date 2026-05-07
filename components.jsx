@@ -661,7 +661,19 @@ function Reviews() {
             <Reveal key={r.id} delay={i * 80}>
               <article className="review-card glass">
                 <div>
-                  <Cover tone={r.cover} title={title} author={author} size="lg" />
+                  {r.image ? (
+                    <img
+                      src={r.image}
+                      alt={`${title} — ${author}`}
+                      style={{
+                        width: "100%", aspectRatio: "2/3", objectFit: "cover",
+                        borderRadius: 6,
+                        boxShadow: "inset 8px 0 12px -10px rgba(0,0,0,.35), 0 6px 24px -8px rgba(40,30,15,.45), 0 2px 4px rgba(40,30,15,.15)",
+                      }}
+                    />
+                  ) : (
+                    <Cover tone={r.cover} title={title} author={author} size="lg" />
+                  )}
                 </div>
                 <div>
                   <div className="eyebrow" style={{ marginBottom: 6 }}>

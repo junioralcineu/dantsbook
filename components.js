@@ -926,7 +926,17 @@ function Reviews() {
       delay: i * 80
     }, /*#__PURE__*/React.createElement("article", {
       className: "review-card glass"
-    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Cover, {
+    }, /*#__PURE__*/React.createElement("div", null, r.image ? /*#__PURE__*/React.createElement("img", {
+      src: r.image,
+      alt: `${title} — ${author}`,
+      style: {
+        width: "100%",
+        aspectRatio: "2/3",
+        objectFit: "cover",
+        borderRadius: 6,
+        boxShadow: "inset 8px 0 12px -10px rgba(0,0,0,.35), 0 6px 24px -8px rgba(40,30,15,.45), 0 2px 4px rgba(40,30,15,.15)"
+      }
+    }) : /*#__PURE__*/React.createElement(Cover, {
       tone: r.cover,
       title: title,
       author: author,

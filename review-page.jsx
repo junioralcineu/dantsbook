@@ -62,7 +62,16 @@ function ReviewPage() {
           <span className="star">{"★".repeat(review.rating)}</span>
         </div>
         <Reveal className="reader-cover">
-          <Cover tone={review.cover} title={title} author={author} size="lg" />
+          {review.image ? (
+            <img
+              src={review.image}
+              alt={`${title} — ${author}`}
+              style={{ width: 200, aspectRatio: "2/3", objectFit: "cover", borderRadius: 6,
+                boxShadow: "inset 8px 0 12px -10px rgba(0,0,0,.35), 0 8px 28px -8px rgba(40,30,15,.50)" }}
+            />
+          ) : (
+            <Cover tone={review.cover} title={title} author={author} size="lg" />
+          )}
         </Reveal>
         <Reveal as="h1" className="reader-title" delay={80}>{title}</Reveal>
         <Reveal className="reader-author" delay={160}>{author}</Reveal>

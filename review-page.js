@@ -79,7 +79,17 @@ function ReviewPage() {
     className: "star"
   }, "★".repeat(review.rating))), /*#__PURE__*/React.createElement(Reveal, {
     className: "reader-cover"
-  }, /*#__PURE__*/React.createElement(Cover, {
+  }, review.image ? /*#__PURE__*/React.createElement("img", {
+    src: review.image,
+    alt: `${title} — ${author}`,
+    style: {
+      width: 200,
+      aspectRatio: "2/3",
+      objectFit: "cover",
+      borderRadius: 6,
+      boxShadow: "inset 8px 0 12px -10px rgba(0,0,0,.35), 0 8px 28px -8px rgba(40,30,15,.50)"
+    }
+  }) : /*#__PURE__*/React.createElement(Cover, {
     tone: review.cover,
     title: title,
     author: author,

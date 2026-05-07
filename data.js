@@ -366,6 +366,7 @@ const REVIEWS = [{
   },
   category: "Classic",
   cover: "cv-navy",
+  image: "bookimages/noites_brancas.jpg",
   rating: 5,
   affiliateUrl: "https://www.amazon.com.br/s?k=Noites+Brancas+Dostoiévski+Penguin+Companhia",
   affiliateAfterParagraph: 5,

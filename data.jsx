@@ -395,6 +395,7 @@ const REVIEWS = [
     author:   { en: "Fyodor Dostoyevsky",   pt: "Fiódor Dostoiévski"  },
     category: "Classic",
     cover:    "cv-navy",
+    image:    "bookimages/noites_brancas.jpg",
     rating:   5,
     affiliateUrl: "https://www.amazon.com.br/s?k=Noites+Brancas+Dostoiévski+Penguin+Companhia",
     affiliateAfterParagraph: 5,
