@@ -1,6 +1,6 @@
 // Reading room: timer, ambience (Web Audio synthesised), rotating encouragements
 
-const { useState, useEffect, useRef, useCallback } = React;
+const { useCallback } = React; // useState/useEffect/useRef already declared by components.js
 
 // ── Ambience engine (Web Audio API) ───────────────────────────────
 function makeAmbience(ctx, kind) {

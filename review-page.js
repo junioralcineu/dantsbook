@@ -1,6 +1,3 @@
-const {
-  useEffect
-} = React;
 function ReviewPage() {
   const {
     lang,

@@ -1,7 +1,3 @@
-const {
-  useEffect,
-  useState
-} = React;
 function PreviewPage() {
   const {
     lang,

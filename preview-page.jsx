@@ -1,5 +1,3 @@
-const { useEffect, useState } = React;
-
 function PreviewPage() {
   const { lang, t } = useLang();
   const [tw, setTweak] = useTweaks({

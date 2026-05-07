@@ -1,5 +1,3 @@
-const { useState } = React;
-
 function OpinionCard({ o }) {
   const { t, d } = useLang();
   return (

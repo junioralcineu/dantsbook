@@ -1,6 +1,3 @@
-const {
-  useState
-} = React;
 function OpinionCard({
   o
 }) {

@@ -1,5 +1,3 @@
-const { useEffect } = React;
-
 function ReviewPage() {
   const { lang, t } = useLang();
   const [tw, setTweak] = useTweaks({

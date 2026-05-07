@@ -1,5 +1,3 @@
-const { useState, useMemo } = React;
-
 function ArticlesPage() {
   const { lang, t, d } = useLang();
   const [tw, setTweak] = useTweaks({

@@ -1,7 +1,3 @@
-const {
-  useState,
-  useMemo
-} = React;
 function ArticlesPage() {
   const {
     lang,
