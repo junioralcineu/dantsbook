@@ -1,39 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hand-written sitemap — no build step generates this anymore.
+  If you add a new page or a new review, add one <url> block for it here.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://junioralcineu.github.io/dantsbook/</loc>
-    <lastmod>2026-05-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://junioralcineu.github.io/dantsbook/Articles.html</loc>
-    <lastmod>2026-05-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://junioralcineu.github.io/dantsbook/Opinions.html</loc>
-    <lastmod>2026-05-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://junioralcineu.github.io/dantsbook/Preview.html</loc>
-    <lastmod>2026-05-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://junioralcineu.github.io/dantsbook/Reading.html</loc>
-    <lastmod>2026-05-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://junioralcineu.github.io/dantsbook/Review.html</loc>
-    <lastmod>2026-05-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://junioralcineu.github.io/dantsbook/index.html</loc></url>
+  <url><loc>https://junioralcineu.github.io/dantsbook/articles.html</loc></url>
+  <url><loc>https://junioralcineu.github.io/dantsbook/opinions.html</loc></url>
+  <url><loc>https://junioralcineu.github.io/dantsbook/preview.html</loc></url>
+  <url><loc>https://junioralcineu.github.io/dantsbook/reading.html</loc></url>
+  <url><loc>https://junioralcineu.github.io/dantsbook/review-white-nights.html</loc></url>
 </urlset>

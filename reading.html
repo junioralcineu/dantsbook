@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="A focus timer with ambient sound for slow reading sessions." />
+<link rel="icon" type="image/png" sizes="16x16" href="images/logo-favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/logo-favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/logo-favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/logo-favicon.png">
+<title>Dant's — Reading room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<script>
+  try {
+    var l = localStorage.getItem("dants.lang") || "en";
+    document.documentElement.setAttribute("data-lang", l);
+    document.documentElement.lang = l === "pt" ? "pt-PT" : "en";
+  } catch (e) {}
+</script>
+</head>
+<body class="reading">
+
+<div class="room dim">
+  <div class="room-top">
+    <a class="room-back" href="index.html"><span style="font-size:16px;line-height:1">&#8249;</span> <span data-lang-en>Back to journal</span><span data-lang-pt>Voltar ao diário</span></a>
+    <div class="room-meta"><span data-lang-en>Reading room</span><span data-lang-pt>Sala de leitura</span></div>
+    <div style="width:148px"></div>
+  </div>
+
+  <div class="room-stage">
+    <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+
+    <div class="dial-wrap">
+      <div class="dial-pulse"></div>
+      <svg class="dial-svg" viewBox="0 0 280 280">
+        <circle class="dial-track" cx="140" cy="140" r="130" />
+        <circle class="dial-fill" cx="140" cy="140" r="130" />
+      </svg>
+      <div class="dial-inner">
+        <div class="dial-state" data-room-dial-state></div>
+        <div class="dial-time">25:00</div>
+        <div class="dial-state" style="opacity:.7"><span data-lang-en>of</span><span data-lang-pt>de</span> <span data-room-dial-of-time>25:00</span></div>
+      </div>
+    </div>
+
+    <div class="room-controls">
+      <button class="ctrl primary" data-room-begin data-begin="Begin reading" data-resume="Resume"><span data-lang-en>Begin reading</span><span data-lang-pt>Começar a ler</span></button>
+      <button class="ctrl primary" data-room-pause style="display:none"><span data-lang-en>Pause</span><span data-lang-pt>Pausar</span></button>
+      <button class="ctrl" data-room-reset disabled><span data-lang-en>Reset</span><span data-lang-pt>Reiniciar</span></button>
+    </div>
+
+    <div class="presets" role="group" aria-label="Session length">
+      <button class="preset" data-room-preset="900">15 min</button>
+      <button class="preset" data-room-preset="1500" aria-pressed="true">25 min</button>
+      <button class="preset" data-room-preset="2400">40 min</button>
+      <button class="preset" data-room-preset="3600">60 min</button>
+    </div>
+  </div>
+
+  <div class="room-bottom">
+    <div class="session-line">
+      <span><span data-lang-en>Today's sessions</span><span data-lang-pt>Sessões hoje</span></span>
+      <span class="pip-row" aria-label="sessions today">
+        <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+        <span data-room-extra style="margin-left:6px"></span>
+      </span>
+    </div>
+
+    <div class="amb" role="group" aria-label="Ambience">
+      <button class="amb-btn off" data-room-amb-toggle title="Ambience">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M3 2 L10 6 L3 10 Z"/></svg>
+      </button>
+      <div class="amb-bars amb-paused" aria-hidden="true" style="color:var(--ink-2)"><i></i><i></i><i></i><i></i></div>
+      <select data-room-amb-kind aria-label="Ambience kind">
+        <option value="library"><span data-lang-en>Quiet library</span></option>
+        <option value="rain">Soft rain</option>
+        <option value="fire">Low fire</option>
+      </select>
+      <input type="range" min="0" max="1" step="0.01" value="0.35" class="amb-vol" data-room-amb-vol aria-label="Volume" />
+    </div>
+  </div>
+
+  <div class="room-hint"><span data-lang-en>Tip — close other tabs. The world will wait.</span><span data-lang-pt>Dica — fecha os outros separadores. O mundo espera.</span></div>
+</div>
+
+<div class="encourage" aria-live="polite"></div>
+
+<div class="finished">
+  <div class="finished-card">
+    <div class="eyebrow" data-room-finished-eyebrow data-template="{time} of focused reading"></div>
+    <h2><span data-lang-en>That was a good page.</span><span data-lang-pt>Foi uma boa página.</span></h2>
+    <p class="body-m" style="color:var(--ink-2)" data-room-finished-body data-template="You read for {time} without breaking. Stretch, sip something warm, mark the page."></p>
+    <div style="margin-top:14px">
+      <button class="pill solid" data-room-read-again><span data-lang-en>Read again</span><span data-lang-pt>Ler de novo</span></button>
+      <a class="pill" href="articles.html"><span data-lang-en>Browse articles</span><span data-lang-pt>Ver artigos</span></a>
+      <a class="pill ghost" href="index.html"><span data-lang-en>Back to journal</span><span data-lang-pt>Voltar ao diário</span></a>
+    </div>
+  </div>
+</div>
+
+<script src="site.js"></script>
+<script>
+  // Set the dial-state labels in the current language before reading.js renders.
+  (function () {
+    const el = document.querySelector("[data-room-dial-state]");
+    if (!el) return;
+    const pt = document.documentElement.getAttribute("data-lang") === "pt";
+    const w = pt
+      ? { ready: "Pronto", reading: "A ler", paused: "Em pausa", complete: "Sessão concluída" }
+      : { ready: "Ready", reading: "Reading", paused: "Paused", complete: "Session complete" };
+    el.dataset.ready = w.ready;
+    el.dataset.reading = w.reading;
+    el.dataset.paused = w.paused;
+    el.dataset.complete = w.complete;
+    el.classList.add("dial-state");
+  })();
+</script>
+<script src="reading.js"></script>
+</body>
+</html>

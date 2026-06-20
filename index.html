@@ -1,8 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Dant's — a slow reading journal for the classics, philosophy, and the occasional novel that won't let me sleep." />
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo-favicon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo-favicon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="images/logo-favicon.png">
@@ -13,548 +14,537 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
-
 <link rel="stylesheet" href="styles.css" />
 
-<style>
-  :root {
-    /* Light Apple-warm palette (default) */
-    --bg: oklch(0.985 0.006 80);
-    --bg-2: oklch(0.965 0.012 75);
-    --surface: oklch(0.995 0.004 80);
-    --ink: oklch(0.22 0.012 60);
-    --ink-2: oklch(0.42 0.012 60);
-    --ink-3: oklch(0.62 0.010 60);
-    --line: oklch(0.88 0.008 70);
-    --line-2: oklch(0.92 0.006 70);
-    --accent: oklch(0.58 0.13 35);   /* terracotta */
-    --accent-2: oklch(0.58 0.13 95); /* warm gold (paired) */
-    --shadow: 0 1px 2px rgba(40,30,15,.04), 0 12px 40px -12px rgba(40,30,15,.10);
-
-    --font-display: 'Fraunces', 'EB Garamond', Georgia, serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  }
-
-  /* Dark navy theme (toggle via Tweaks) */
-  html[data-theme="navy"] {
-    --bg: oklch(0.20 0.04 245);
-    --bg-2: oklch(0.16 0.05 250);
-    --surface: oklch(0.24 0.04 245);
-    --ink: oklch(0.97 0.005 80);
-    --ink-2: oklch(0.78 0.012 80);
-    --ink-3: oklch(0.58 0.010 80);
-    --line: oklch(0.32 0.03 245);
-    --line-2: oklch(0.28 0.03 245);
-    --accent: oklch(0.78 0.10 80);
-  }
-
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  html { background: var(--bg); }
-  body {
-    font-family: var(--font-body);
-    color: var(--ink);
-    background: var(--bg);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "ss01","cv11";
-    overflow-x: hidden;
-  }
-  ::selection { background: color-mix(in oklab, var(--accent) 30%, transparent); }
-
-  /* ─── Animated gradient background ─────────────────────────────── */
-  .bg-stage {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background: var(--bg);
-    overflow: hidden;
-  }
-  .bg-stage::before {
-    content: "";
-    position: absolute; inset: -20%;
-    background:
-      radial-gradient(45% 40% at 18% 22%, color-mix(in oklab, var(--accent) 14%, transparent) 0%, transparent 60%),
-      radial-gradient(50% 45% at 82% 12%, color-mix(in oklab, var(--accent-2) 10%, transparent) 0%, transparent 65%),
-      radial-gradient(60% 50% at 70% 85%, color-mix(in oklab, var(--accent) 10%, transparent) 0%, transparent 70%),
-      radial-gradient(40% 35% at 12% 78%, color-mix(in oklab, var(--accent-2) 8%, transparent) 0%, transparent 60%);
-    filter: blur(40px) saturate(110%);
-    animation: drift 28s ease-in-out infinite alternate;
-  }
-  .bg-stage::after {
-    /* paper grain */
-    content: "";
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(rgba(80,60,30,.05) 1px, transparent 1px),
-      radial-gradient(rgba(80,60,30,.04) 1px, transparent 1px);
-    background-size: 3px 3px, 7px 7px;
-    background-position: 0 0, 1px 2px;
-    opacity: .35;
-    mix-blend-mode: multiply;
-  }
-  html[data-theme="navy"] .bg-stage::after { mix-blend-mode: screen; opacity:.12; }
-  @keyframes drift {
-    0%   { transform: translate3d(0,0,0)     rotate(0deg);   }
-    50%  { transform: translate3d(2%, -2%,0) rotate(2deg);   }
-    100% { transform: translate3d(-2%, 1%,0) rotate(-1.5deg);}
-  }
-  body[data-anim="slow"]  .bg-stage::before { animation-duration: 50s; }
-  body[data-anim="fast"]  .bg-stage::before { animation-duration: 14s; }
-  body[data-anim="off"]   .bg-stage::before { animation: none; }
-  html.no-grain .bg-stage::after { display: none; }
-
-  /* ─── Liquid glass (refined for light) ─────────────────────────── */
-  .glass {
-    background: color-mix(in oklab, white 55%, transparent);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    backdrop-filter: blur(20px) saturate(160%);
-    border: .5px solid color-mix(in oklab, var(--ink) 8%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 1px 2px rgba(40,30,15,.03);
-  }
-  html[data-theme="navy"] .glass {
-    background: color-mix(in oklab, white 5%, transparent);
-    border-color: color-mix(in oklab, white 14%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 1px 2px rgba(0,0,0,.2);
-  }
-
-  /* page wrapper sits above bg */
-  #app { position: relative; z-index: 1; }
-
-  /* ─── Type ─────────────────────────────────────────────────────── */
-  .display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; line-height: 1.02; }
-  .display em { font-style: italic; color: var(--ink-2); font-variation-settings: "SOFT" 100; }
-  .eyebrow { font: 500 11px/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
-  .body-l  { font-size: 17px; line-height: 1.55; color: var(--ink-2); }
-  .body-m  { font-size: 14.5px; line-height: 1.55; color: var(--ink-2); }
-  .mono    { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-
-  /* ─── Layout helpers ───────────────────────────────────────────── */
-  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
-  section { position: relative; }
-
-  /* ─── Reveal on scroll ─────────────────────────────────────────── */
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ─── Buttons / pill ───────────────────────────────────────────── */
-  .pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    border-radius: 999px; padding: 10px 18px;
-    font: 500 13.5px/1 var(--font-body);
-    color: var(--ink); cursor: default;
-    transition: transform .2s ease, background .2s ease;
-    border: .5px solid color-mix(in oklab, var(--ink) 12%, transparent);
-    background: color-mix(in oklab, white 65%, transparent);
-    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-  }
-  .pill:hover { transform: translateY(-1px); background: color-mix(in oklab, white 85%, transparent); }
-  .pill.solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .pill.solid:hover { background: color-mix(in oklab, var(--ink) 88%, var(--accent)); }
-  .pill.ghost { background: transparent; }
-  .pill.lg { padding: 16px 28px; font-size: 14.5px; }
-
-  .chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 6px 12px; border-radius: 999px;
-    font: 500 12px/1 var(--font-body);
-    border: .5px solid var(--line);
-    background: color-mix(in oklab, white 60%, transparent);
-    color: var(--ink-2); cursor: default;
-    transition: all .18s ease;
-  }
-  .chip[aria-pressed="true"] {
-    background: var(--ink); color: var(--bg); border-color: var(--ink);
-  }
-  .chip:hover { color: var(--ink); }
-
-  /* ─── Nav ──────────────────────────────────────────────────────── */
-  .nav {
-    position: sticky; top: 0; z-index: 50;
-    padding: 14px 0;
-  }
-  .nav-inner {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 14px 10px 22px; border-radius: 999px;
-  }
-  .logo {
-    font-family: var(--font-display); font-size: 22px; letter-spacing: -0.01em;
-    color: var(--ink);
-  }
-  .logo sup { font-size: .55em; color: var(--ink-3); margin-left: 2px; }
-  .nav-links { display: none; gap: 26px; }
-  @media (min-width: 760px) { .nav-links { display: flex; } }
-  .nav-links a {
-    font: 500 13px/1 var(--font-body); color: var(--ink-3); text-decoration: none;
-    transition: color .2s ease;
-  }
-  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
-
-  /* ─── Hero ─────────────────────────────────────────────────────── */
-  .hero {
-    padding: clamp(64px, 11vw, 140px) 0 clamp(72px, 12vw, 160px);
-    text-align: center;
-  }
-  .hero h1 {
-    font-size: clamp(44px, 8vw, 104px);
-    margin: 18px 0 0;
-    max-width: 18ch; margin-left: auto; margin-right: auto;
-    text-wrap: balance;
-  }
-  .hero p.lede {
-    max-width: 56ch; margin: 26px auto 0;
-    font-size: clamp(15px, 1.3vw, 18px);
-    line-height: 1.55; color: var(--ink-2);
-    text-wrap: pretty;
-  }
-  .hero .cta-row {
-    display: flex; gap: 10px; justify-content: center; margin-top: 36px;
-    flex-wrap: wrap;
-  }
-
-  /* shelf marker (decorative, geometric) */
-  .marker { display: inline-flex; align-items: center; gap: 10px; color: var(--ink-3); }
-  .marker .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); }
-  .marker .line { width: 28px; height: 1px; background: var(--line); }
-
-  /* ─── Section header ───────────────────────────────────────────── */
-  .sec-head {
-    display: flex; align-items: end; justify-content: space-between;
-    gap: 24px; margin-bottom: 28px; flex-wrap: wrap;
-  }
-  .sec-head h2 {
-    font-family: var(--font-display); font-weight: 400;
-    font-size: clamp(28px, 3.4vw, 42px);
-    letter-spacing: -.015em; margin: 8px 0 0;
-    text-wrap: balance;
-  }
-
-  /* ─── Quote ─────────────────────────────────────────────────────── */
-  .quote-card {
-    padding: clamp(36px, 5vw, 72px);
-    border-radius: 28px;
-    text-align: center;
-  }
-  .quote-card blockquote {
-    font-family: var(--font-display); font-style: italic; font-weight: 400;
-    font-size: clamp(24px, 3vw, 40px);
-    line-height: 1.18; letter-spacing: -.01em;
-    margin: 0; color: var(--ink);
-    text-wrap: balance;
-  }
-  .quote-card cite {
-    display: block; margin-top: 22px; font-style: normal;
-    font: 500 12px/1 var(--font-body); letter-spacing: .12em;
-    text-transform: uppercase; color: var(--ink-3);
-  }
-
-  /* ─── Currently reading ─────────────────────────────────────────── */
-  .reading-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-  @media (min-width: 720px) { .reading-grid { grid-template-columns: 1fr 1fr; } }
-  .reading-card {
-    display: grid; grid-template-columns: 88px 1fr;
-    gap: 18px; padding: 18px; border-radius: 18px;
-    transition: transform .25s ease;
-  }
-  .reading-card:hover { transform: translateY(-2px); }
-  .progress {
-    position: relative; height: 4px; background: var(--line-2);
-    border-radius: 999px; overflow: hidden; margin-top: 10px;
-  }
-  .progress > span {
-    display: block; height: 100%; background: var(--ink);
-    border-radius: 999px;
-    transition: width 1.2s cubic-bezier(.2,.7,.2,1);
-  }
-  .progress-meta {
-    display: flex; justify-content: space-between; margin-top: 8px;
-    font: 500 11.5px/1 var(--font-body); color: var(--ink-3);
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* ─── Book cover (placeholder) ─────────────────────────────────── */
-  .cover {
-    aspect-ratio: 2 / 3; border-radius: 4px;
-    box-shadow:
-      inset 8px 0 12px -10px rgba(0,0,0,.35),
-      inset -1px 0 0 rgba(255,255,255,.5),
-      0 6px 18px -8px rgba(40,30,15,.35),
-      0 1px 2px rgba(40,30,15,.1);
-    position: relative; overflow: hidden;
-    color: white;
-    display: flex; flex-direction: column; justify-content: space-between;
-    padding: 10px 10px 10px 16px;
-  }
-  .cover .c-author { font: 500 8.5px/1.1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
-  .cover .c-title  { font: 500 13px/1.05 var(--font-display); letter-spacing: -.005em; text-wrap: balance; }
-  .cover .c-mark { width: 16px; height: 1px; background: currentColor; opacity: .8; }
-  .cover.lg { border-radius: 6px; }
-  .cover.lg .c-author { font-size: 10px; }
-  .cover.lg .c-title { font-size: 22px; line-height: 1.05; }
-
-  /* tonal cover variants */
-  .cv-ink   { background: linear-gradient(160deg, oklch(.22 .03 60), oklch(.16 .03 60)); }
-  .cv-clay  { background: linear-gradient(160deg, oklch(.55 .12 35), oklch(.38 .10 30)); }
-  .cv-olive { background: linear-gradient(160deg, oklch(.50 .07 130), oklch(.34 .06 130)); }
-  .cv-bone  { background: linear-gradient(160deg, oklch(.92 .02 80), oklch(.82 .02 80)); color: oklch(.25 .02 60); }
-  .cv-navy  { background: linear-gradient(160deg, oklch(.30 .07 250), oklch(.20 .06 250)); }
-  .cv-rose  { background: linear-gradient(160deg, oklch(.62 .10 20), oklch(.48 .09 20)); }
-  .cv-moss  { background: linear-gradient(160deg, oklch(.42 .07 145), oklch(.30 .06 145)); }
-  .cv-amber { background: linear-gradient(160deg, oklch(.70 .12 75), oklch(.55 .11 70)); color: oklch(.18 .03 60); }
-
-  /* ─── Featured ─────────────────────────────────────────────────── */
-  .featured {
-    display: grid; grid-template-columns: 1fr; gap: 32px;
-    padding: clamp(28px, 4vw, 56px); border-radius: 28px;
-    align-items: center;
-  }
-  @media (min-width: 860px) { .featured { grid-template-columns: 320px 1fr; gap: 56px; } }
-  .featured h3 {
-    font-family: var(--font-display); font-weight: 400;
-    font-size: clamp(28px, 3.4vw, 44px); letter-spacing: -.015em;
-    margin: 14px 0 6px; text-wrap: balance;
-  }
-  .featured .meta { display: flex; gap: 10px; flex-wrap: wrap; }
-  .star { color: var(--accent); letter-spacing: 2px; }
-  .price-row {
-    display: flex; align-items: center; gap: 14px; margin-top: 22px;
-    flex-wrap: wrap;
-  }
-  .price { font: 500 16px/1 var(--font-body); color: var(--ink); }
-  .price s { color: var(--ink-3); font-weight: 400; margin-right: 6px; }
-
-  /* ─── Lists (collections) ──────────────────────────────────────── */
-  .filter-row {
-    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px;
-  }
-  .lists-grid {
-    display: grid; grid-template-columns: 1fr; gap: 16px;
-  }
-  @media (min-width: 700px) { .lists-grid { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1040px) { .lists-grid { grid-template-columns: 1fr 1fr 1fr; } }
-  .list-card {
-    padding: 22px; border-radius: 20px;
-    transition: transform .25s ease, box-shadow .25s ease;
-    cursor: default; display: flex; flex-direction: column; gap: 16px;
-    min-height: 240px;
-  }
-  .list-card:hover { transform: translateY(-3px); }
-  .list-stack {
-    display: flex; align-items: flex-end; gap: -10px; height: 120px;
-    position: relative; padding-left: 6px;
-  }
-  .list-stack .cover {
-    width: 76px; height: 114px; aspect-ratio: auto;
-    margin-left: -22px;
-    transition: transform .25s ease;
-  }
-  .list-stack .cover:first-child { margin-left: 0; }
-  .list-card:hover .list-stack .cover:nth-child(1) { transform: rotate(-4deg) translate(-2px, -2px); }
-  .list-card:hover .list-stack .cover:nth-child(2) { transform: translateY(-3px); }
-  .list-card:hover .list-stack .cover:nth-child(3) { transform: rotate(4deg) translate(2px, -2px); }
-  .list-card h4 {
-    font-family: var(--font-display); font-weight: 400;
-    font-size: 22px; letter-spacing: -.01em; margin: 0;
-  }
-  .list-meta { font: 500 12px/1 var(--font-body); color: var(--ink-3); letter-spacing: .04em; }
-
-  /* ─── About ─────────────────────────────────────────────────────── */
-  .about {
-    display: grid; grid-template-columns: 1fr; gap: 40px;
-    align-items: center;
-  }
-  @media (min-width: 800px) { .about { grid-template-columns: 1.2fr 1fr; gap: 64px; } }
-  .portrait {
-    aspect-ratio: 4/5; border-radius: 18px; overflow: hidden;
-    background:
-      repeating-linear-gradient( 45deg,
-        oklch(.88 .02 60) 0 6px, oklch(.92 .02 60) 6px 12px);
-    position: relative;
-    display: flex; align-items: end; padding: 18px;
-  }
-  .portrait .tag {
-    font: 500 10px/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase;
-    color: var(--ink-3); background: rgba(255,255,255,.7); padding: 6px 10px; border-radius: 999px;
-    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  }
-
-  /* ─── Newsletter ───────────────────────────────────────────────── */
-  .news {
-    padding: clamp(36px, 5vw, 72px);
-    border-radius: 28px; text-align: center;
-  }
-  .news-form {
-    display: flex; gap: 8px; max-width: 480px; margin: 26px auto 0;
-    padding: 6px; border-radius: 999px;
-  }
-  .news-form input {
-    flex: 1; border: 0; outline: 0; background: transparent;
-    padding: 12px 16px; font: 400 14.5px var(--font-body); color: var(--ink);
-  }
-  .news-form input::placeholder { color: var(--ink-3); }
-
-  /* ─── Footer ───────────────────────────────────────────────────── */
-  footer {
-    padding: 60px 0 40px; margin-top: 80px;
-    border-top: .5px solid var(--line);
-    color: var(--ink-3); font-size: 12.5px;
-  }
-  footer .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
-
-  /* ─── Reading progress bar (top of viewport) ───────────────────── */
-  .scroll-progress {
-    position: fixed; top: 0; left: 0; height: 2px; z-index: 60;
-    background: var(--accent); width: 0%;
-    transition: width .1s linear;
-    box-shadow: 0 0 8px var(--accent);
-  }
-
-  /* ─── Disclosure (Amazon affiliate hint) ──────────────────────── */
-  .disclosure {
-    font: 500 11px/1.4 var(--font-body); color: var(--ink-3);
-    letter-spacing: .04em; margin-top: 10px;
-  }
-
-  /* ─── Aesthetic poster ─────────────────────────────────────────── */
-  .poster-wrap {
-    display: flex; justify-content: center;
-    perspective: 1200px;
-  }
-  .poster {
-    position: relative;
-    width: 100%; max-width: 720px;
-    aspect-ratio: 4 / 5.5;
-    background:
-      linear-gradient(180deg, oklch(.96 .02 80) 0%, oklch(.93 .03 80) 100%);
-    color: oklch(.20 .02 60);
-    padding: clamp(28px, 4vw, 56px);
-    display: flex; flex-direction: column; gap: 18px;
-    border-radius: 4px;
-    box-shadow:
-      0 1px 0 rgba(255,255,255,.6) inset,
-      0 0 0 1px rgba(40,30,15,.08),
-      0 30px 60px -30px rgba(40,30,15,.45),
-      0 8px 18px -8px rgba(40,30,15,.20);
-    transform: rotate(-1.2deg);
-    transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease;
-    overflow: hidden;
-    isolation: isolate;
-  }
-  .poster:hover {
-    transform: rotate(0deg) translateY(-4px);
-    box-shadow:
-      0 1px 0 rgba(255,255,255,.7) inset,
-      0 0 0 1px rgba(40,30,15,.10),
-      0 40px 70px -28px rgba(40,30,15,.55),
-      0 12px 24px -10px rgba(40,30,15,.25);
-  }
-  .poster::after {
-    content: ""; position: absolute; inset: 0;
-    background-image:
-      radial-gradient(rgba(80,55,20,.10) 1px, transparent 1px),
-      radial-gradient(rgba(80,55,20,.06) 1px, transparent 1px);
-    background-size: 3px 3px, 7px 7px;
-    background-position: 0 0, 1px 2px;
-    mix-blend-mode: multiply;
-    opacity: .6;
-    pointer-events: none;
-  }
-  .poster-grid {
-    position: absolute; inset: 14px;
-    border: 1px solid rgba(40,30,15,.18);
-    border-radius: 2px;
-    pointer-events: none;
-  }
-  .poster-head, .poster-foot {
-    display: flex; justify-content: space-between; align-items: center;
-    z-index: 1; position: relative;
-  }
-  .poster-mono {
-    font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-    letter-spacing: .22em; text-transform: uppercase;
-    color: oklch(.40 .03 60);
-  }
-  .poster-rule {
-    height: 1px; background: oklch(.40 .03 60);
-    opacity: .35; z-index: 1; position: relative;
-  }
-  .poster-body {
-    flex: 1; display: flex; flex-direction: column; justify-content: center;
-    align-items: center; text-align: center;
-    z-index: 1; position: relative;
-    padding: 8px 0;
-  }
-  .poster-mark {
-    font-family: var(--font-display); font-style: italic;
-    font-size: clamp(72px, 10vw, 140px);
-    line-height: .6; color: var(--accent);
-    margin-bottom: 8px;
-  }
-  .poster-text {
-    font-family: var(--font-display);
-    font-weight: 400; font-style: italic;
-    font-size: clamp(22px, 3.4vw, 44px);
-    line-height: 1.12; letter-spacing: -.012em;
-    margin: 0; max-width: 22ch;
-    text-wrap: balance;
-    color: oklch(.18 .02 60);
-  }
-  .poster-cite {
-    margin-top: 26px;
-    font: 500 11.5px/1 var(--font-body);
-    letter-spacing: .14em; text-transform: uppercase;
-    color: oklch(.40 .03 60);
-  }
-
-  html[data-theme="navy"] .poster {
-    background: linear-gradient(180deg, oklch(.30 .04 250) 0%, oklch(.22 .04 250) 100%);
-    color: oklch(.95 .01 80);
-  }
-  html[data-theme="navy"] .poster-mono,
-  html[data-theme="navy"] .poster-cite { color: oklch(.78 .02 80); }
-  html[data-theme="navy"] .poster-text { color: oklch(.97 .005 80); }
-  html[data-theme="navy"] .poster-grid { border-color: rgba(255,255,255,.18); }
-  html[data-theme="navy"] .poster-rule { background: oklch(.78 .02 80); }
-
-  /* ─── Free preview card ────────────────────────────────────────── */
-  .preview-card {
-    display: grid; grid-template-columns: 1fr; gap: 28px;
-    padding: clamp(28px, 4vw, 48px);
-    border-radius: 24px;
-    text-decoration: none; color: inherit;
-    transition: transform .25s ease, box-shadow .25s ease;
-    cursor: pointer;
-    align-items: center;
-  }
-  @media (min-width: 760px) {
-    .preview-card { grid-template-columns: 220px 1fr; gap: 48px; }
-  }
-  .preview-card:hover { transform: translateY(-3px); }
-  .preview-cover-wrap { max-width: 220px; }
-  .preview-h {
-    font-size: clamp(26px, 3vw, 36px);
-    margin: 10px 0 14px;
-    letter-spacing: -.015em; text-wrap: balance;
-  }
-  .preview-blurb { margin: 0; }
-  .preview-row {
-    display: flex; align-items: center; gap: 16px; margin-top: 22px; flex-wrap: wrap;
-  }
-</style>
-
-<script type="application/json" id="speaker-notes">[]</script>
+<script>
+  try {
+    var l = localStorage.getItem("dants.lang") || "en";
+    document.documentElement.setAttribute("data-lang", l);
+    document.documentElement.lang = l === "pt" ? "pt-PT" : "en";
+  } catch (e) {}
+</script>
 </head>
 <body>
 
 <div class="bg-stage" aria-hidden="true"></div>
 <div id="scroll-progress" class="scroll-progress"></div>
 
-<div id="app"></div>
+<header class="nav">
+  <div class="wrap">
+    <div class="nav-inner glass">
+      <a href="index.html" class="logo">Dant's<sup>&reg;</sup></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html" class="active"><span data-lang-en>Journal</span><span data-lang-pt>Diário</span></a>
+        <a href="articles.html"><span data-lang-en>Articles</span><span data-lang-pt>Artigos</span></a>
+        <a href="reading.html"><span data-lang-en>Reading</span><span data-lang-pt>Leitura</span></a>
+        <a href="opinions.html"><span data-lang-en>Opinions</span><span data-lang-pt>Opiniões</span></a>
+        <a href="index.html#about"><span data-lang-en>About</span><span data-lang-pt>Sobre</span></a>
+      </nav>
+      <div class="nav-cta">
+        <button class="pill ghost" data-lang-btn aria-label="Switch language" style="padding-left:14px;padding-right:14px;min-width:44px;font-weight:600;letter-spacing:.06em">PT</button>
+        <button class="pill ghost" data-spotify-toggle aria-pressed="false" style="padding-left:14px;padding-right:14px">
+          <span class="amb-bars"><i></i><i></i><i></i></span>
+          <span data-lang-en>Ambience</span><span data-lang-pt>Ambiente</span>
+        </button>
+        <a class="pill solid" href="index.html#newsletter"><span data-lang-en>Subscribe</span><span data-lang-pt>Subscrever</span></a>
+      </div>
+      <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+        <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor"><rect width="18" height="2" rx="1"/><rect y="5.5" width="13" height="2" rx="1"/><rect y="11" width="18" height="2" rx="1"/></svg>
+      </button>
+    </div>
+    <div class="nav-mobile" aria-hidden="true">
+      <div class="nav-mobile-inner">
+        <nav class="nav-mobile-links" aria-label="Mobile navigation">
+          <a href="index.html" class="active"><span data-lang-en>Journal</span><span data-lang-pt>Diário</span></a>
+          <a href="articles.html"><span data-lang-en>Articles</span><span data-lang-pt>Artigos</span></a>
+          <a href="reading.html"><span data-lang-en>Reading</span><span data-lang-pt>Leitura</span></a>
+          <a href="opinions.html"><span data-lang-en>Opinions</span><span data-lang-pt>Opiniões</span></a>
+          <a href="index.html#about"><span data-lang-en>About</span><span data-lang-pt>Sobre</span></a>
+        </nav>
+        <div class="nav-mobile-cta">
+          <button class="pill ghost" data-lang-btn aria-label="Switch language" style="padding-left:14px;padding-right:14px;min-width:44px;font-weight:600;letter-spacing:.06em">PT</button>
+          <a class="pill solid" href="index.html#newsletter"><span data-lang-en>Subscribe</span><span data-lang-pt>Subscrever</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="spotify-widget" aria-hidden="true" role="region" aria-label="Ambient music player">
+  <div class="spotify-widget-header">
+    <span class="spotify-widget-label">Ambiente &middot; Dant's</span>
+    <div style="display:flex;align-items:center;gap:5px">
+      <button class="spotify-size-btn" data-spotify-size="152" title="Mini">S</button>
+      <button class="spotify-size-btn active" data-spotify-size="352" title="Normal">M</button>
+      <button class="spotify-size-btn" data-spotify-size="500" title="Grande">L</button>
+      <button class="spotify-close" aria-label="Fechar player">&#10005;</button>
+    </div>
+  </div>
+  <div class="spotify-iframe-wrap" style="height:352px"></div>
+  <p class="spotify-login-note">Faça login no Spotify para ouvir a música completa.</p>
+</div>
 
-<script src="tweaks-panel.js"></script>
-<script src="i18n.js"></script>
-<script src="data.js"></script>
-<script src="components.js"></script>
-<script src="app.js"></script>
+<section id="hero" class="hero wrap">
+  <div class="marker reveal" style="justify-content:center;display:flex">
+    <span class="line"></span><span class="dot"></span>
+    <span class="eyebrow"><span data-lang-en>A reading journal — week 6</span><span data-lang-pt>Um diário de leitura — semana 6</span></span>
+    <span class="dot"></span><span class="line"></span>
+  </div>
+  <h1 class="display reveal" style="transition-delay:120ms">
+    <span data-lang-en>Books I'm reading</span><span data-lang-pt>Livros que leio</span>
+    <em><span data-lang-en>slowly</span><span data-lang-pt>devagar</span></em>,
+    <br /><span data-lang-en>and the</span><span data-lang-pt>e os</span>
+    <em><span data-lang-en>thoughts they leave behind.</span><span data-lang-pt>pensamentos que deixam.</span></em>
+  </h1>
+  <p class="lede reveal" style="transition-delay:240ms">
+    <span data-lang-en>Dant's is a quiet corner of the internet for the classics, philosophy, and the occasional novel that won't let me sleep. No ratings out of ten, no hot takes — just margins, marginalia, and the books I'd hand you across a kitchen table.</span>
+    <span data-lang-pt>Dant's é um cantinho tranquilo da internet dedicado aos clássicos, à filosofia e ao romance ocasional que não me deixa dormir. Sem notas de um a dez, sem opiniões precipitadas — apenas anotações nas margens e os livros que colocaria nas tuas mãos.</span>
+  </p>
+  <div class="cta-row reveal" style="transition-delay:360ms">
+    <a class="pill solid lg" href="#featured"><span data-lang-en>Read this week's piece</span><span data-lang-pt>Ler o texto desta semana</span></a>
+    <a class="pill lg" href="#lists"><span data-lang-en>Browse the shelves</span><span data-lang-pt>Explorar as prateleiras</span></a>
+  </div>
+</section>
+
+<section class="wrap" style="margin-top:24px">
+  <div class="reveal">
+    <div class="quote-card glass">
+      <div class="eyebrow" style="margin-bottom:22px"><span data-lang-en>Quote of the week</span><span data-lang-pt>Citação da semana</span></div>
+      <blockquote>
+        <span style="color:var(--accent);font-style:normal;margin-right:4px">"</span>
+        <span data-lang-en>The unexamined life is not worth living — but the examined life, examined too closely, becomes a kind of trembling.</span>
+        <span data-lang-pt>A vida não examinada não vale a pena ser vivida — mas a vida examinada, examinada de perto demais, torna-se uma espécie de tremor.</span>
+        <span style="color:var(--accent);font-style:normal;margin-left:4px">"</span>
+      </blockquote>
+      <cite><span data-lang-en>From this week's notebook · on Plato's Apology</span><span data-lang-pt>Do caderno desta semana · sobre a Apologia de Platão</span></cite>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" style="margin-top:clamp(56px, 10vw, 120px)">
+  <div class="sec-head reveal">
+    <div>
+      <div class="eyebrow"><span data-lang-en>From the press · Edition № 017</span><span data-lang-pt>Da imprensa · Edição № 017</span></div>
+      <h2><span data-lang-en>A line worth pinning to the wall.</span><span data-lang-pt>Uma frase que vale a pena pregar na parede.</span></h2>
+    </div>
+    <div class="body-m" style="max-width:360px">
+      <span data-lang-en>Each season I print one passage as a small studio poster. Free to download, free to put up beside your reading chair.</span>
+      <span data-lang-pt>Cada estação imprimo uma passagem como um pequeno poster de estúdio. Gratuito para descarregar, gratuito para colocar junto à cadeira de leitura.</span>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="poster-wrap">
+      <div class="poster" role="figure" aria-label="Quote poster">
+        <div class="poster-grid" aria-hidden="true"></div>
+        <div class="poster-head">
+          <span class="poster-mono">DANT'S &middot; STUDIO PRESS</span>
+          <span class="poster-mono"><span data-lang-en>Spring · MMXXVI</span><span data-lang-pt>Primavera · MMXXVI</span></span>
+        </div>
+        <div class="poster-rule"></div>
+        <div class="poster-body">
+          <span class="poster-mark">"</span>
+          <p class="poster-text">
+            <span data-lang-en data-poster-quote-en>The world breaks everyone, and afterward, some are strong at the broken places.</span>
+            <span data-lang-pt data-poster-quote-pt>Liberdade é pouco. O que desejo ainda não tem nome.</span>
+          </p>
+          <span class="poster-cite">&mdash;
+            <span data-lang-en data-poster-cite-en>Ernest Hemingway · A Farewell to Arms</span>
+            <span data-lang-pt data-poster-cite-pt>Clarice Lispector · A Paixão Segundo G.H.</span>
+          </span>
+        </div>
+        <div class="poster-rule"></div>
+        <div class="poster-foot">
+          <span class="poster-mono">№ 017 &middot; OF &infin;</span>
+          <span class="poster-mono">PRINT &middot; READ &middot; KEEP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="currently" class="wrap" style="margin-top:clamp(48px, 10vw, 96px)">
+  <div class="sec-head reveal">
+    <div>
+      <div class="eyebrow"><span data-lang-en>On the nightstand</span><span data-lang-pt>Na mesa de cabeceira</span></div>
+      <h2><span data-lang-en>Currently reading.</span><span data-lang-pt>A ler agora.</span></h2>
+    </div>
+    <div class="body-m" style="max-width:360px">
+      <span data-lang-en>Four books I keep returning to this season. Progress moves at the pace of a slow afternoon.</span>
+      <span data-lang-pt>Quatro livros aos quais continuo a voltar esta estação. O progresso avança ao ritmo de uma tarde tranquila.</span>
+    </div>
+  </div>
+  <div class="reading-grid">
+    <article class="reading-card glass reveal">
+      <div class="cover cv-ink"><div class="c-mark"></div><div><div class="c-author">Marcus Aurelius</div><div class="c-title"><span data-lang-en>Meditations</span><span data-lang-pt>Meditações</span></div></div></div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:4px">Marcus Aurelius</div>
+        <h3 style="font-family:var(--font-display);font-weight:400;font-size:22px;margin:2px 0 8px;letter-spacing:-.01em"><span data-lang-en>Meditations</span><span data-lang-pt>Meditações</span></h3>
+        <p class="body-m" style="margin:0"><span data-lang-en>Slow mornings with this one. Book V is destroying me, gently.</span><span data-lang-pt>Manhãs lentas com este. O Livro V está a destruir-me, gentilmente.</span></p>
+        <div class="progress" role="progressbar" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100"><span style="width:61%"></span></div>
+        <div class="progress-meta"><span>p. 187 / 304</span><span>61%</span></div>
+      </div>
+    </article>
+    <article class="reading-card glass reveal" style="transition-delay:90ms">
+      <div class="cover cv-clay"><div class="c-mark"></div><div><div class="c-author">Fyodor Dostoevsky</div><div class="c-title"><span data-lang-en>The Brothers Karamazov</span><span data-lang-pt>Os Irmãos Karamázov</span></div></div></div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:4px">Fyodor Dostoevsky</div>
+        <h3 style="font-family:var(--font-display);font-weight:400;font-size:22px;margin:2px 0 8px;letter-spacing:-.01em"><span data-lang-en>The Brothers Karamazov</span><span data-lang-pt>Os Irmãos Karamázov</span></h3>
+        <p class="body-m" style="margin:0"><span data-lang-en>Just past the Grand Inquisitor. Need a week to recover.</span><span data-lang-pt>Acabei de passar o Grande Inquisidor. Preciso de uma semana para recuperar.</span></p>
+        <div class="progress" role="progressbar" aria-valuenow="52" aria-valuemin="0" aria-valuemax="100"><span style="width:52%"></span></div>
+        <div class="progress-meta"><span>p. 412 / 796</span><span>52%</span></div>
+      </div>
+    </article>
+    <article class="reading-card glass reveal" style="transition-delay:180ms">
+      <div class="cover cv-olive"><div class="c-mark"></div><div><div class="c-author">Herodotus</div><div class="c-title"><span data-lang-en>The Histories</span><span data-lang-pt>As Histórias</span></div></div></div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:4px">Herodotus</div>
+        <h3 style="font-family:var(--font-display);font-weight:400;font-size:22px;margin:2px 0 8px;letter-spacing:-.01em"><span data-lang-en>The Histories</span><span data-lang-pt>As Histórias</span></h3>
+        <p class="body-m" style="margin:0"><span data-lang-en>Reading slowly with a map and a strong coffee.</span><span data-lang-pt>A ler devagar com um mapa e um café forte.</span></p>
+        <div class="progress" role="progressbar" aria-valuenow="13" aria-valuemin="0" aria-valuemax="100"><span style="width:13%"></span></div>
+        <div class="progress-meta"><span>p. 95 / 760</span><span>13%</span></div>
+      </div>
+    </article>
+    <article class="reading-card glass reveal" style="transition-delay:270ms">
+      <div class="cover cv-bone"><div class="c-mark"></div><div><div class="c-author">Seneca</div><div class="c-title"><span data-lang-en>Letters from a Stoic</span><span data-lang-pt>Cartas de um Estoico</span></div></div></div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:4px">Seneca</div>
+        <h3 style="font-family:var(--font-display);font-weight:400;font-size:22px;margin:2px 0 8px;letter-spacing:-.01em"><span data-lang-en>Letters from a Stoic</span><span data-lang-pt>Cartas de um Estoico</span></h3>
+        <p class="body-m" style="margin:0"><span data-lang-en>I keep underlining everything. The book is mostly ink now.</span><span data-lang-pt>Continuo a sublinhar tudo. O livro é sobretudo tinta agora.</span></p>
+        <div class="progress" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100"><span style="width:87%"></span></div>
+        <div class="progress-meta"><span>p. 220 / 254</span><span>87%</span></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="featured" class="wrap" style="margin-top:clamp(56px, 10vw, 120px)">
+  <div class="sec-head reveal">
+    <div>
+      <div class="eyebrow"><span data-lang-en>Book of the month</span><span data-lang-pt>Livro do mês</span></div>
+      <h2><span data-lang-en>The one I'd press into your hands.</span><span data-lang-pt>Aquele que eu daria nas tuas mãos.</span></h2>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="featured glass">
+      <img src="bookimages/91nYfNvYa7L._SL1500_.jpg" alt="The Republic — Plato"
+        style="width:100%;max-width:280px;aspect-ratio:2/3;object-fit:cover;border-radius:6px;box-shadow:inset 8px 0 12px -10px rgba(0,0,0,.35), 0 6px 24px -8px rgba(40,30,15,.45), 0 2px 4px rgba(40,30,15,.15)" />
+      <div>
+        <div class="meta"><span class="chip">Philosophy</span><span class="chip">Classics</span><span class="chip">Political theory</span></div>
+        <h3><span data-lang-en>The Republic</span><span data-lang-pt>A República</span></h3>
+        <div class="eyebrow" style="letter-spacing:.1em">Plato · translated by C. D. C. Reeve</div>
+        <div class="star" aria-label="5 of 5" style="margin-top:14px;font-size:18px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="body-l" style="margin-top:18px">
+          <span data-lang-en>I came back to The Republic this winter expecting a familiar conversation and found a book that argues with me from the first page. Plato isn't building a city — he's building a mirror. What you see in it depends on how honestly you're willing to look.</span>
+          <span data-lang-pt>Voltei à República neste inverno à espera de uma conversa familiar e encontrei um livro que discute comigo desde a primeira página. Platão não está a construir uma cidade — está a construir um espelho. O que vês nele depende de quão honestamente estás disposto a olhar.</span>
+        </p>
+        <p class="display" style="font-style:italic;font-size:clamp(20px, 2vw, 26px);color:var(--ink-2);margin-top:22px;border-left:2px solid var(--accent);padding-left:18px">
+          <span data-lang-en>A book that asks what justice would feel like if you could afford to be honest about it.</span>
+          <span data-lang-pt>Um livro que pergunta como seria a justiça se te pudesses dar ao luxo de ser honesto sobre ela.</span>
+        </p>
+        <div class="price-row">
+          <span class="price"><s>$18.00</s>$12.95</span>
+          <a class="pill solid" href="https://amzn.to/4cXORM3" target="_blank" rel="sponsored noopener"><span data-lang-en>Buy on Amazon →</span><span data-lang-pt>Comprar na Amazon →</span></a>
+          <a class="pill" href="#"><span data-lang-en>Read our notes</span><span data-lang-pt>Ler as notas</span></a>
+        </div>
+        <div class="disclosure"><span data-lang-en>Affiliate disclosure: as an Amazon Associate I may earn from qualifying purchases.</span><span data-lang-pt>Divulgação de afiliado: como Associado Amazon posso ganhar com compras elegíveis.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews" class="wrap" style="margin-top:clamp(56px, 10vw, 120px)">
+  <div class="sec-head reveal">
+    <div>
+      <div class="eyebrow"><span data-lang-en>Reading Journal</span><span data-lang-pt>Diário de Leitura</span></div>
+      <h2><span data-lang-en>Books I've read, honestly.</span><span data-lang-pt>Livros que li, honestamente.</span></h2>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <article class="review-card glass reveal">
+      <div>
+        <img src="bookimages/noites_brancas.jpg" alt="White Nights — Fyodor Dostoyevsky"
+          style="width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:6px;box-shadow:inset 8px 0 12px -10px rgba(0,0,0,.35), 0 6px 24px -8px rgba(40,30,15,.45), 0 2px 4px rgba(40,30,15,.15)" />
+      </div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:6px">Classic <span class="star" style="margin-left:10px;font-size:13px">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+        <h3 style="font-family:var(--font-display);font-weight:400;font-size:clamp(22px, 2.4vw, 30px);letter-spacing:-.015em;margin:4px 0 6px;text-wrap:balance">
+          <span data-lang-en>White Nights</span><span data-lang-pt>Noites Brancas</span>
+        </h3>
+        <div class="eyebrow" style="margin-bottom:16px;letter-spacing:.1em"><span data-lang-en>Fyodor Dostoyevsky</span><span data-lang-pt>Fiódor Dostoiévski</span></div>
+        <p class="body-m" style="margin:0 0 20px">
+          <span data-lang-en>You know that feeling of walking alone late at night? The street completely empty, the silence… it feels like your thoughts start speaking louder than the city itself. That's exactly the atmosphere Dostoyevsky creates from the very first pages of White Nigh…</span>
+          <span data-lang-pt>Sabe aquela sensação de andar sozinho de madrugada? A rua completamente vazia, o silêncio... parece que a nossa cabeça começa a falar mais alto que a própria cidade. É exatamente esse clima que o Dostoiévski cria logo nas primeiras páginas de Noites Branca…</span>
+        </p>
+        <a class="pill solid" href="review-white-nights.html"><span data-lang-en>Read review →</span><span data-lang-pt>Ler resenha →</span></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="preview" class="wrap" style="margin-top:clamp(56px, 10vw, 120px)">
+  <div class="reveal">
+    <a href="preview.html" class="preview-card glass" aria-label="Free preview read">
+      <div class="preview-cover-wrap">
+        <div class="cover cv-ink lg"><div class="c-mark"></div><div><div class="c-author">Marcus Aurelius</div><div class="c-title"><span data-lang-en>Meditations</span><span data-lang-pt>Meditações</span></div></div></div>
+      </div>
+      <div class="preview-body">
+        <div class="eyebrow"><span data-lang-en>Free preview read</span><span data-lang-pt>Leitura de pré-visualização gratuita</span></div>
+        <h3 class="display preview-h">
+          <span data-lang-en>Two pages of</span><span data-lang-pt>Duas páginas de</span>
+          <em><span data-lang-en>Meditations</span><span data-lang-pt>Meditações</span></em>
+          <span data-lang-en>, on the house.</span><span data-lang-pt>, por nossa conta.</span>
+        </h3>
+        <p class="body-l preview-blurb">
+          <span data-lang-en>A free, two-page preview from Book V — the morning passage that has lived on my fridge for the better part of a decade. No signup, no paywall — just the page that made me start the journal in the first place.</span>
+          <span data-lang-pt>Uma pré-visualização gratuita de duas páginas do Livro V — a passagem matinal que viveu no meu frigorífico durante cerca de uma década. Sem registo, sem paywall — apenas a página que me fez começar o diário.</span>
+        </p>
+        <div class="preview-row">
+          <span class="pill solid"><span data-lang-en>Open the preview →</span><span data-lang-pt>Abrir a pré-visualização →</span></span>
+          <span class="body-m" style="color:var(--ink-3)"><span data-lang-en>~3 min</span><span data-lang-pt>~3 min</span> · Translated by Gregory Hays</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section id="lists" class="wrap" style="margin-top:clamp(56px, 10vw, 120px)">
+  <div class="sec-head reveal">
+    <div>
+      <div class="eyebrow"><span data-lang-en>Reading lists</span><span data-lang-pt>Listas de leitura</span></div>
+      <h2><span data-lang-en>Literary Curation</span><span data-lang-pt>Curadoria Literária</span></h2>
+    </div>
+    <div class="body-m" style="max-width:360px">
+      <span data-lang-en>Curated reading paths through the canon. Filter by what you're in the mood for — most lists overlap on purpose.</span>
+      <span data-lang-pt>Percursos de leitura cuidados pelo cânone. Filtra pelo teu estado de espírito — a maioria das listas sobrepõe-se propositadamente.</span>
+    </div>
+  </div>
+
+  <div class="filter-row reveal" data-filter-group="#lists-grid">
+    <button class="chip" data-filter-key="All" aria-pressed="true"><span data-lang-en>All</span><span data-lang-pt>Todos</span></button>
+    <button class="chip" data-filter-key="Philosophy"><span data-lang-en>Philosophy</span><span data-lang-pt>Filosofia</span></button>
+    <button class="chip" data-filter-key="Classics"><span data-lang-en>Classics</span><span data-lang-pt>Clássicos</span></button>
+    <button class="chip" data-filter-key="Fiction"><span data-lang-en>Fiction</span><span data-lang-pt>Ficção</span></button>
+    <button class="chip" data-filter-key="Essays"><span data-lang-en>Essays</span><span data-lang-pt>Ensaios</span></button>
+    <span class="chip" style="border-style:dashed;color:var(--ink-3)"><span data-filter-count>6</span> <span data-lang-en>lists</span><span data-lang-pt>listas</span></span>
+  </div>
+
+  <div class="lists-grid" id="lists-grid">
+    <article class="list-card glass reveal" data-filter-value="Philosophy">
+      <div class="list-stack">
+        <div class="cover cv-bone"></div><div class="cover cv-ink"></div><div class="cover cv-clay"></div>
+      </div>
+      <div>
+        <div class="list-meta"><span style="color:var(--accent)">&#9679;</span> 6 <span data-lang-en>books</span><span data-lang-pt>livros</span> · Philosophy</div>
+        <h4><span data-lang-en>First steps into Stoicism</span><span data-lang-pt>Primeiros passos no Estoicismo</span></h4>
+        <p class="body-m" style="margin:6px 0 0"><span data-lang-en>Where to begin if Marcus, Seneca, and Epictetus all feel daunting.</span><span data-lang-pt>Por onde começar se Marco Aurélio, Séneca e Epicteto parecem intimidantes.</span></p>
+      </div>
+      <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+        <a class="body-m" href="articles.html#Philosophy" style="color:var(--ink);text-decoration:none;font-weight:500"><span data-lang-en>Open list →</span><span data-lang-pt>Abrir lista →</span></a>
+        <span class="mono" style="font-size:11px;color:var(--ink-3)">01</span>
+      </div>
+    </article>
+    <article class="list-card glass reveal" data-filter-value="Fiction,Classics" style="transition-delay:70ms">
+      <div class="list-stack">
+        <div class="cover cv-navy"></div><div class="cover cv-clay"></div><div class="cover cv-ink"></div>
+      </div>
+      <div>
+        <div class="list-meta"><span style="color:var(--accent)">&#9679;</span> 8 <span data-lang-en>books</span><span data-lang-pt>livros</span> · Fiction · Classics</div>
+        <h4><span data-lang-en>Russian winters</span><span data-lang-pt>Invernos russos</span></h4>
+        <p class="body-m" style="margin:6px 0 0"><span data-lang-en>Long novels for long nights — Dostoevsky, Tolstoy, Chekhov.</span><span data-lang-pt>Romances longos para noites longas — Dostoiévski, Tolstói, Tchékhov.</span></p>
+      </div>
+      <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+        <a class="body-m" href="articles.html#Fiction" style="color:var(--ink);text-decoration:none;font-weight:500"><span data-lang-en>Open list →</span><span data-lang-pt>Abrir lista →</span></a>
+        <span class="mono" style="font-size:11px;color:var(--ink-3)">02</span>
+      </div>
+    </article>
+    <article class="list-card glass reveal" data-filter-value="Classics,Philosophy" style="transition-delay:140ms">
+      <div class="list-stack">
+        <div class="cover cv-olive"></div><div class="cover cv-bone"></div><div class="cover cv-amber"></div>
+      </div>
+      <div>
+        <div class="list-meta"><span style="color:var(--accent)">&#9679;</span> 7 <span data-lang-en>books</span><span data-lang-pt>livros</span> · Classics · Philosophy</div>
+        <h4><span data-lang-en>The Greeks, slowly</span><span data-lang-pt>Os Gregos, devagar</span></h4>
+        <p class="body-m" style="margin:6px 0 0"><span data-lang-en>A reading order that rewards patience over completion.</span><span data-lang-pt>Uma ordem de leitura que recompensa a paciência em vez da conclusão.</span></p>
+      </div>
+      <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+        <a class="body-m" href="articles.html#Classics" style="color:var(--ink);text-decoration:none;font-weight:500"><span data-lang-en>Open list →</span><span data-lang-pt>Abrir lista →</span></a>
+        <span class="mono" style="font-size:11px;color:var(--ink-3)">03</span>
+      </div>
+    </article>
+    <article class="list-card glass reveal" data-filter-value="Essays" style="transition-delay:210ms">
+      <div class="list-stack">
+        <div class="cover cv-rose"></div><div class="cover cv-bone"></div><div class="cover cv-moss"></div>
+      </div>
+      <div>
+        <div class="list-meta"><span style="color:var(--accent)">&#9679;</span> 5 <span data-lang-en>books</span><span data-lang-pt>livros</span> · Essays</div>
+        <h4><span data-lang-en>Letters &amp; journals</span><span data-lang-pt>Cartas &amp; diários</span></h4>
+        <p class="body-m" style="margin:6px 0 0"><span data-lang-en>Books that read like someone thinking out loud, addressed to you.</span><span data-lang-pt>Livros que se leem como alguém a pensar em voz alta, dirigidos a ti.</span></p>
+      </div>
+      <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+        <a class="body-m" href="articles.html#Essays" style="color:var(--ink);text-decoration:none;font-weight:500"><span data-lang-en>Open list →</span><span data-lang-pt>Abrir lista →</span></a>
+        <span class="mono" style="font-size:11px;color:var(--ink-3)">04</span>
+      </div>
+    </article>
+    <article class="list-card glass reveal" data-filter-value="Philosophy,Fiction" style="transition-delay:280ms">
+      <div class="list-stack">
+        <div class="cover cv-ink"></div><div class="cover cv-amber"></div><div class="cover cv-clay"></div>
+      </div>
+      <div>
+        <div class="list-meta"><span style="color:var(--accent)">&#9679;</span> 9 <span data-lang-en>books</span><span data-lang-pt>livros</span> · Philosophy · Fiction</div>
+        <h4><span data-lang-en>Short books, long shadows</span><span data-lang-pt>Livros curtos, sombras longas</span></h4>
+        <p class="body-m" style="margin:6px 0 0"><span data-lang-en>Under 200 pages. Each one rearranges something in you.</span><span data-lang-pt>Menos de 200 páginas. Cada um reorganiza algo em ti.</span></p>
+      </div>
+      <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+        <a class="body-m" href="articles.html#Philosophy" style="color:var(--ink);text-decoration:none;font-weight:500"><span data-lang-en>Open list →</span><span data-lang-pt>Abrir lista →</span></a>
+        <span class="mono" style="font-size:11px;color:var(--ink-3)">05</span>
+      </div>
+    </article>
+    <article class="list-card glass reveal" data-filter-value="Philosophy,Essays" style="transition-delay:350ms">
+      <div class="list-stack">
+        <div class="cover cv-clay"></div><div class="cover cv-navy"></div><div class="cover cv-bone"></div>
+      </div>
+      <div>
+        <div class="list-meta"><span style="color:var(--accent)">&#9679;</span> 6 <span data-lang-en>books</span><span data-lang-pt>livros</span> · Philosophy · Essays</div>
+        <h4><span data-lang-en>Existentialism, warmly</span><span data-lang-pt>Existencialismo, com carinho</span></h4>
+        <p class="body-m" style="margin:6px 0 0"><span data-lang-en>Camus, Kierkegaard, Frankl — read for company, not for despair.</span><span data-lang-pt>Camus, Kierkegaard, Frankl — ler para ter companhia, não para o desespero.</span></p>
+      </div>
+      <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+        <a class="body-m" href="articles.html#Philosophy" style="color:var(--ink);text-decoration:none;font-weight:500"><span data-lang-en>Open list →</span><span data-lang-pt>Abrir lista →</span></a>
+        <span class="mono" style="font-size:11px;color:var(--ink-3)">06</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="about" class="wrap" style="margin-top:clamp(64px, 12vw, 140px)">
+  <div class="about">
+    <div class="reveal">
+      <div class="eyebrow"><span data-lang-en>About the journal</span><span data-lang-pt>Sobre o diário</span></div>
+      <h2 class="display" style="font-size:clamp(32px, 4.4vw, 56px);margin:10px 0 22px;letter-spacing:-.018em;text-wrap:balance">
+        <span data-lang-en>I'm Dant. I read</span><span data-lang-pt>Sou Dant. Leio</span>
+        <em><span data-lang-en>slowly</span><span data-lang-pt>devagar</span></em>
+        <span data-lang-en>, on purpose.</span><span data-lang-pt>, de propósito.</span>
+      </h2>
+      <p class="body-l">
+        <span data-lang-en>For a long time I tried to read fast — to keep up, to finish, to count. Then a friend gave me a paperback of <em>Meditations</em> with one sentence underlined, and I realized I'd been confusing pages-per-week with thinking.</span>
+        <span data-lang-pt>Durante muito tempo tentei ler depressa — para me manter a par, para terminar, para contar. Depois um amigo deu-me um livro de bolso das <em>Meditações</em> com uma frase sublinhada, e percebi que tinha confundido páginas por semana com pensamento.</span>
+      </p>
+      <p class="body-l" style="margin-top:14px">
+        <span data-lang-en>This site is the notebook I wished I'd kept earlier. I write about the classics and philosophy mostly, with the occasional novel that earns its way in. No reviews to please an algorithm — just honest letters about what a book did to my week.</span>
+        <span data-lang-pt>Este site é o caderno que gostaria de ter começado mais cedo. Escrevo sobretudo sobre os clássicos e a filosofia, com o romance ocasional que merece a sua entrada. Sem críticas para agradar a um algoritmo — apenas cartas honestas sobre o que um livro fez à minha semana.</span>
+      </p>
+      <div class="cta-row" style="justify-content:flex-start;margin-top:28px">
+        <a class="pill" href="#newsletter"><span data-lang-en>Letters by email</span><span data-lang-pt>Cartas por email</span></a>
+        <a class="pill ghost" href="#"><span data-lang-en>Reading log →</span><span data-lang-pt>Registo de leituras →</span></a>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:150ms">
+      <div class="portrait"><span class="tag"><span data-lang-en>Portrait — to be replaced</span><span data-lang-pt>Retrato — a substituir</span></span></div>
+    </div>
+  </div>
+</section>
+
+<section id="newsletter" class="wrap" style="margin-top:clamp(64px, 12vw, 140px)">
+  <div class="reveal">
+    <div class="news glass">
+      <div class="eyebrow"><span data-lang-en>A slow letter</span><span data-lang-pt>Uma carta lenta</span></div>
+      <h2 class="display" style="font-size:clamp(28px, 3.6vw, 46px);margin:10px 0 14px;letter-spacing:-.015em">
+        <span data-lang-en>One book, one thought, every Sunday morning.</span><span data-lang-pt>Um livro, um pensamento, todas as manhãs de domingo.</span>
+      </h2>
+      <p class="body-l" style="max-width:52ch;margin:0 auto">
+        <span data-lang-en>No tracking, no roundups, no five-star anything. Just a short letter from my reading week — about 600 words, with coffee.</span>
+        <span data-lang-pt>Sem rastreamento, sem resumos, sem nada de cinco estrelas. Apenas uma carta curta da minha semana de leitura — cerca de 600 palavras, com café.</span>
+      </p>
+      <form class="news-form glass" data-newsletter-form>
+        <input type="email" data-newsletter-email placeholder="your@email.com" aria-label="Email" />
+        <button type="submit" class="pill solid" data-newsletter-submit>
+          <span data-lang-en>Subscribe</span><span data-lang-pt>Subscrever</span>
+        </button>
+      </form>
+      <div class="body-m" style="margin-top:12px;min-height:18px;color:var(--ink-3)" data-newsletter-status>
+        <span data-lang-en>Free. One click to unsubscribe. No autoplay videos, ever.</span>
+        <span data-lang-pt>Gratuito. Um clique para cancelar. Sem vídeos automáticos, nunca.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <div class="logo" style="font-size:18px">Dant's<sup>&reg;</sup></div>
+    <div>&copy; 2026 Dant's reading journal · <span data-lang-en>Built slowly, on purpose.</span><span data-lang-pt>Construído devagar, de propósito.</span></div>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script>
+  (function () {
+    const form = document.querySelector("[data-newsletter-form]");
+    if (!form) return;
+    const input = form.querySelector("[data-newsletter-email]");
+    const status = document.querySelector("[data-newsletter-status]");
+    const successHtml = '<span data-lang-en>Welcome to the shelf — check your inbox.</span><span data-lang-pt>Bem-vindo à prateleira — verifica a caixa de entrada.</span>';
+    const invalidHtml = '<span data-lang-en>That email doesn\'t look quite right.</span><span data-lang-pt>Esse email não parece estar certo.</span>';
+    const noteHtml = status.innerHTML;
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const ok = /\S+@\S+\.\S+/.test(input.value);
+      status.innerHTML = ok ? successHtml : invalidHtml;
+      if (ok) {
+        const submit = form.querySelector("[data-newsletter-submit]");
+        submit.innerHTML = '<span data-lang-en>Subscribed ✓</span><span data-lang-pt>Subscrito ✓</span>';
+      }
+    });
+    input.addEventListener("input", () => { status.innerHTML = noteHtml; });
+  })();
+</script>
+<script>
+  // Daily rotating poster quote — same quote for everyone on the same day,
+  // changes automatically at midnight. To add/edit quotes, just edit the
+  // two arrays below (EN and PT don't need to match 1-to-1, each rotates
+  // through its own list using the same day index).
+  (function () {
+    const QUOTES_EN = [
+      { text: "The world breaks everyone, and afterward, some are strong at the broken places.", source: "Ernest Hemingway · A Farewell to Arms" },
+      { text: "So we beat on, boats against the current, borne back ceaselessly into the past.", source: "F. Scott Fitzgerald · The Great Gatsby" },
+      { text: "The past is never dead. It's not even past.", source: "William Faulkner · Requiem for a Nun" },
+      { text: "Definitions belong to the definers, not the defined.", source: "Toni Morrison · Beloved" },
+      { text: "You never really understand a person until you consider things from his point of view.", source: "Harper Lee · To Kill a Mockingbird" },
+      { text: "I went to the woods because I wished to live deliberately.", source: "Henry David Thoreau · Walden" },
+      { text: "I am large, I contain multitudes.", source: "Walt Whitman · Song of Myself" },
+      { text: "All that we see or seem is but a dream within a dream.", source: "Edgar Allan Poe · A Dream Within a Dream" },
+      { text: "And now that you don't have to be perfect, you can be good.", source: "John Steinbeck · East of Eden" },
+      { text: "You have to carry the fire.", source: "Cormac McCarthy · The Road" },
+      { text: "I took a deep breath and listened to the old brag of my heart: I am, I am, I am.", source: "Sylvia Plath · The Bell Jar" },
+      { text: "The truth does not change according to our ability to stomach it.", source: "Flannery O'Connor · Letters" },
+    ];
+    const QUOTES_PT = [
+      { text: "Liberdade é pouco. O que desejo ainda não tem nome.", source: "Clarice Lispector · A Paixão Segundo G.H." },
+      { text: "Mestre não é quem sempre ensina, mas quem de repente aprende.", source: "Guimarães Rosa · Grande Sertão: Veredas" },
+      { text: "Que não seja imortal, posto que é chama, mas que seja infinito enquanto dure.", source: "Vinicius de Moraes · Soneto da Fidelidade" },
+      { text: "Não tive filhos, não transmiti a nenhuma criatura o legado da nossa miséria.", source: "Machado de Assis · Memórias Póstumas de Brás Cubas" },
+      { text: "No meio do caminho tinha uma pedra, tinha uma pedra no meio do caminho.", source: "Carlos Drummond de Andrade · No Meio do Caminho" },
+      { text: "O que não sei fazer, desmancho em poesia.", source: "Manoel de Barros" },
+      { text: "Escrever é uma maldição que salva.", source: "Clarice Lispector · A Descoberta do Mundo" },
+      { text: "Sou um tupi tangendo um alaúde.", source: "Mário de Andrade" },
+      { text: "O sertão é do tamanho do mundo.", source: "Guimarães Rosa · Grande Sertão: Veredas" },
+      { text: "Vou-me embora pra Pasárgada, lá sou amigo do rei.", source: "Manuel Bandeira" },
+      { text: "Não quero faca nem queijo. Quero a fome.", source: "Adélia Prado · Bagagem" },
+      { text: "Feliz aquele que transfere o que sabe e aprende o que ensina.", source: "Cora Coralina" },
+    ];
+
+    const day = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+    const en = QUOTES_EN[day % QUOTES_EN.length];
+    const pt = QUOTES_PT[day % QUOTES_PT.length];
+
+    const qEn = document.querySelector("[data-poster-quote-en]");
+    const qPt = document.querySelector("[data-poster-quote-pt]");
+    const cEn = document.querySelector("[data-poster-cite-en]");
+    const cPt = document.querySelector("[data-poster-cite-pt]");
+    if (qEn) qEn.textContent = en.text;
+    if (qPt) qPt.textContent = pt.text;
+    if (cEn) cEn.textContent = en.source;
+    if (cPt) cPt.textContent = pt.source;
+  })();
+</script>
 </body>
 </html>
